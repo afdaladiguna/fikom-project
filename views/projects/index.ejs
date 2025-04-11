@@ -1,0 +1,34 @@
+<% layout('layouts/boilerplate.ejs') %>
+<h1 class="fs-2 pb-3">Semua Proyek Mahasiswa</h1>
+
+<div class="row">
+  <% for(let project of projects) { %>
+
+  <div class="col-lg-3">
+    <div class="card mb-4" style="width: 19.5rem; height: 23rem">
+      <!-- <img src="..." class="card-img-top" alt="..."> -->
+      <% if(project.images.length) { %>
+
+      <img crossorigin="anonymous" class="img-fluid" alt="" src="<%= project.images[0].url %>" style="max-height: 10rem" />
+      <% } else { %>
+      <img crossorigin="anonymous" class="img-fluid bg-secondary py-4 my-2" alt="" src="https://res.cloudinary.com/depkm8h6l/image/upload/f_auto,q_auto/v1/fikom-project/logo-fikom" />
+      <% } %>
+      <div class="card-body pt-2">
+        <p class="mb-2"><span class="badge bg-info"> <%= project.category %> </span></p>
+        <h5 class="card-title mt-1"><%= truncateDescription(project.title, 10) %></h5>
+        <p class="card-text"><%= truncateDescription(project.description, 70) %></p>
+      </div>
+      <div class="card-footer py-3">
+        <a href="/projects/<%= project._id %>" class="btn btn-sm btn-warning">Lihat <%= truncateDescription(project.title, 10) %> </a>
+      </div>
+    </div>
+  </div>
+
+  <% } %>
+</div>
+
+<script>
+  const projects = { features: <% - JSON.stringify(projects) %>}
+</script>
+
+<% function truncateDescription(description, maxLength) { if (description.length> maxLength) { return description.slice(0, maxLength) + '...'; } return description; } %>

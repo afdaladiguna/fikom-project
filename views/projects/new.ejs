@@ -1,0 +1,32 @@
+<% layout('layouts/boilerplate.ejs') %>
+    <div class="row">
+        <h1 class="text-center">Proyek Baru</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/projects" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Judul Proyek</label>
+                    <input class="form-control" type="text" id="title" name="project[title]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Deskripsi</label>
+                    <textarea class="form-control" type="text" id="description" rows="5" name="project[description]"
+                        required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="repository">Repository</label>
+                    <input class="form-control" type="text" id="repository" name="project[repository]" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="category">Kategori</label>
+                    <input class="form-control" type="text" id="category" name="project[category]" required>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Gambar</label>
+                    <input class="form-control" type="file" id="image" name="image" multiple>
+                </div>
+                <div class="mb-3 py-2">
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>

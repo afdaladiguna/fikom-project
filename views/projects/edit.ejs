@@ -1,0 +1,80 @@
+<% layout('layouts/boilerplate.ejs') %>
+    <div class="row">
+        <h1 class="text-center">Edit Project</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/projects/<%= project._id %>?_method=PUT" method="POST" class="needs-validation" novalidate
+                enctype="multipart/form-data">
+                <!-- <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="project[title]"
+                        value="<%=project.title %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="project[location]"
+                        value="<%=project.location %>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="price">project Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="price-label">Rp.</span>
+                        <input type="text" class="form-control" id="price" name="project[price]" placeholder="0"
+                            aria-label="price" aria-describedby="price-label" value="<%=project.price %>" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="project[description]"
+                        required><%= project.description %></textarea>
+                </div> -->
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="project[title]" value="<%=project.title %>"
+                        required>
+                    <div class="invalid-feedback">
+                        Please provide a project title.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">description</label>
+                    <textarea class="form-control" type="text" id="description" name="project[description]"
+                        required><%=project.description %></textarea>
+                    <div class="invalid-feedback">
+                        Please provide a project description.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="repository">repository</label>
+                    <input class="form-control" type="text" id="repository" name="project[repository]" value="<%=project.repository %>" required>
+                    <div class="invalid-feedback">
+                        Please provide a project repository.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="category">category</label>
+                    <input class="form-control" type="text" id="category" name="project[category]" value="<%=project.category %>" required>
+                    <div class="invalid-feedback">
+                        Please provide a project category.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Add Image(s)</label>
+                    <input class="form-control" type="file" id="image" name="image" multiple>
+                </div>
+                <div class="mb-3">
+                    <% project.images.forEach(function(img, i) { %>
+                        <img src="<%= img.thumbnail %>" alt="" class="img-thumbnail">
+                        <div class="form-check-inline">
+                            <input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%=img.filename%>">
+                        </div>
+                        <label for="image-<%=i%>">Delete?</label>
+                        <% }) %>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-info">Save project</button>
+                </div>
+            </form>
+            <a href="/projects/<%= project._id  %>">Back to project</a>
+        </div>
+    </div>
