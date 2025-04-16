@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+  <h3>Buat Assignment Baru</h3>
+  <form action="/assignments" method="POST">
+    <div class="mb-3">
+      <label for="subject" class="form-label">Kelas / Mata Kuliah</label>
+      <input type="text" class="form-control" id="subject" name="subject" required />
+    </div>
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul</label>
+      <input type="text" class="form-control" id="title" name="title" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Deskripsi</label>
+      <textarea class="form-control" id="description" name="description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="deadline" class="form-label">Deadline</label>
+      <input type="date" class="form-control" id="deadline" name="deadline" />
+    </div>
+
+    <button class="btn btn-primary">Buat Assignment</button>
+  </form>
+</div>

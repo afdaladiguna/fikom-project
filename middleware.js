@@ -50,6 +50,14 @@ module.exports.isReviewAuthor = async (req, res, next) => {
   next();
 };
 
+module.exports.isDosen = (req, res, next) => {
+  if (!req.isAuthenticated() || req.user.role !== "dosen") {
+    req.flash("error", "Hanya dosen yang dapat mengakses fitur ini.");
+    return res.redirect("/assignments");
+  }
+  next();
+};
+
 module.exports.validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
   if (error) {

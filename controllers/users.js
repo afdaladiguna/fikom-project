@@ -35,7 +35,7 @@ module.exports.renderLogin = (req, res) => {
 module.exports.login = (req, res) => {
   try {
     req.flash("success", "Berhasil login.");
-    const redirectUrl = res.locals.returnTo || "/projects"; // update this line to use res.locals.returnTo now
+    const redirectUrl = res.locals.returnTo || "/assignments"; // update this line to use res.locals.returnTo now
     res.redirect(redirectUrl);
   } catch (e) {
     req.flash("error", "NIM belum terdaftar atau password salah.");

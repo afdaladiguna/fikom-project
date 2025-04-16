@@ -1,0 +1,49 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-8">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3 class="card-title"><%= assignment.title %></h3>
+          <p class="card-text"><%= assignment.description || 'Tidak ada deskripsi' %></p>
+          <% if (assignment.deadline) { %>
+          <p class="text-danger"><strong>Deadline:</strong> <%= new Date(assignment.deadline).toLocaleDateString() %></p>
+          <% } %>
+          <p class="text-muted">Dibuat oleh: <%= assignment.createdBy.name %></p>
+        </div>
+
+        <% if (currentUser && currentUser.role === 'mahasiswa') { %>
+        <div class="card-footer">
+          <a href="/projects/new?assignment=<%= assignment._id %>" class="btn btn-primary">Kumpulkan Proyek</a>
+        </div>
+        <% } %>
+      </div>
+
+      <% if (currentUser && currentUser.role === 'dosen') { %>
+      <div class="mb-3">
+        <h5 class="mb-3">Proyek yang Dikumpulkan:</h5>
+
+        <% if (submissions.length === 0) { %>
+        <p class="text-muted">Belum ada proyek yang dikumpulkan untuk assignment ini.</p>
+        <% } else { %> <% submissions.forEach(project => { %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5><%= project.title %></h5>
+            <p><%= project.description.length > 150 ? project.description.slice(0, 150) + "..." : project.description %></p>
+            <p><strong>Pengumpul:</strong> <%= project.author.name %> / <%= project.author.username %></p>
+
+            <form action="/assignments/<%= assignment._id %>/score/<%= project._id %>" method="POST" class="d-flex align-items-center gap-2">
+              <input class="form-control w-25" type="number" name="score" value="<%= project.score || '' %>" placeholder="Nilai (0-100)" min="0" max="100" required />
+              <button class="btn btn-sm btn-success">Simpan</button>
+            </form>
+
+            <a href="/projects/<%= project._id %>" class="btn btn-sm btn-warning mt-2">Lihat Proyek</a>
+          </div>
+        </div>
+        <% }) %> <% } %>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>

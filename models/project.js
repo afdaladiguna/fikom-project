@@ -28,8 +28,19 @@ const ProjectSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "Review",
+        required: true,
       },
     ],
+    assignment: {
+      type: Schema.Types.ObjectId,
+      ref: "Assignment",
+      required: true,
+    },
+    score: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
   },
   opts
 );

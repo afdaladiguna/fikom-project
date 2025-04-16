@@ -51,6 +51,7 @@ module.exports.projectSchema = Joi.object({
     title: Joi.string().required().escapeHTML(),
     description: Joi.string().required().escapeHTML(),
     repository: Joi.string().required().escapeHTML(),
+    assignment: Joi.string().required().escapeHTML(),
     category: Joi.string().required().escapeHTML(),
   }).required(),
   deleteImages: Joi.array(),
