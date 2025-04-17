@@ -1,29 +1,36 @@
 <% layout('layouts/boilerplate.ejs') %>
 
-<h1 class="fs-2 pb-3">Daftar Assignment</h1>
-
-<% if(assignments.length === 0) { %>
-<p class="text-muted">Belum ada assignment tersedia.</p>
-<% } else { %>
-
-<div class="row">
-  <% for(let assignment of assignments) { %>
-  <div class="col-lg-4">
-    <div class="card mb-4" style="height: 20rem">
-      <div class="card-body">
-        <h5 class="card-title"><%= truncate(assignment.title, 30) %></h5>
-        <p class="card-text text-muted"><%= truncate(assignment.description, 100) %></p>
-        <% if (assignment.deadline) { %>
-        <p class="text-danger mb-2"><b>Deadline:</b> <%= new Date(assignment.deadline).toLocaleDateString() %></p>
-        <% } %>
-        <p class="text-secondary"><small>Dibuat oleh: <%= assignment.createdBy.name %></small></p>
-      </div>
-      <div class="card-footer">
-        <a href="/assignments/<%= assignment._id %>" class="btn btn-sm btn-primary">Lihat Assignment</a>
-      </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="fs-3">Daftar Tugas</h1>
+    <small>Oleh dosen pengampu <%= currentUser.name %></small>
   </div>
+  <% if (currentUser.role === "dosen") { %>
+  <a href="/assignments/new" class="btn btn-success">+ Buat Tugas Baru</a>
   <% } %>
 </div>
 
-<% } %> <% function truncate(text, maxLength) { if (!text) return ''; return text.length > maxLength ? text.slice(0, maxLength) + "..." : text; } %>
+<% if (assignments.length === 0) { %>
+<div class="alert alert-warning">Belum ada assignment yang Anda buat.</div>
+<% } else { %>
+<div class="list-group">
+  <% assignments.forEach(assignment => { %>
+  <div class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1"><%= truncate(assignment.title, 50) %></h5>
+      <small class="text-danger">Deadline: <%= new Date(assignment.deadline).toLocaleDateString() %></small>
+    </div>
+    <small class="text-secondary">Mata Kuliah: <%= assignment.subject %></small>
+    <p class="mb-1 mt-1 text-muted"><%= truncate(assignment.description, 100) || 'Tidak ada deskripsi' %></p>
+    <div class="d-flex justify-content-between align-items-center mt-2">
+      <div></div>
+      <% if (currentUser.role === "dosen") { %>
+      <a href="/assignments/<%= assignment._id %>" class="btn btn-outline-primary btn-sm">Lihat Tugas & Penilaian</a>
+      <% } else { %>
+      <a href="/assignments/<%= assignment._id %>" class="btn btn-outline-primary btn-sm">Lihat Detail Tugas</a>
+      <% } %>
+    </div>
+  </div>
+  <% }); %>
+</div>
+<% } %> <% function truncate(text, maxLength) { if (!text) return ''; return text.length > maxLength ? text.slice(0, maxLength) + '...' : text; } %>

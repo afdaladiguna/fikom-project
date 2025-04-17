@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate.ejs') %>
+<div class="container mt-5">
+  <h3>Edit Assignment</h3>
+  <form action="/assignments/<%= assignment._id %>?_method=PUT" method="POST">
+    <div class="mb-3">
+      <label for="subject" class="form-label">Kelas / Mata Kuliah</label>
+      <input type="text" class="form-control" id="subject" name="subject" value="<%= assignment.subject %>" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul</label>
+      <input type="text" class="form-control" id="title" name="title" value="<%= assignment.title %>" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Deskripsi</label>
+      <textarea class="form-control" id="description" name="description" rows="4"><%= assignment.description %></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="deadline" class="form-label">Deadline</label>
+      <input type="date" class="form-control" id="deadline" name="deadline" value="<%= assignment.deadline ? assignment.deadline.toISOString().split('T')[0] : '' %>" />
+    </div>
+
+    <button class="btn btn-success">Simpan Perubahan</button>
+    <a href="/assignments/<%= assignment._id %>" class="btn btn-secondary ms-2">Batal</a>
+  </form>
+</div>

@@ -6,17 +6,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ms-auto">
-        <a class="nav-link me-5" href="/">Home</a>
         <a class="nav-link me-5" href="/projects">Proyek Mahasiswa</a>
-        <a class="nav-link me-5" href="/projects/new">Tambah Proyek</a>
         <a class="nav-link me-5" href="/assignments">Tugas Mahasiswa</a>
-        <a class="nav-link me-5" href="/assignments/new">Tambah Tugas</a>
       </div>
       <div class="navbar-nav ms-auto">
         <% if(!currentUser) { %>
         <a class="nav-link" href="/login">Login</a>
         <a class="nav-link" href="/register">Register</a>
         <% } else { %>
+        <p class="my-auto text-white me-5">Hello, <%= currentUser.name %></p>
         <a class="nav-link" href="/logout">Logout</a>
         <% } %>
       </div>

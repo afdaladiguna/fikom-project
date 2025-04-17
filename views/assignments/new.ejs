@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container mt-5">
+<div class="container mt-5 px-5">
   <h3>Buat Assignment Baru</h3>
-  <form action="/assignments" method="POST">
+  <form action="/assignments" method="POST" class="needs-validation">
     <div class="mb-3">
       <label for="subject" class="form-label">Kelas / Mata Kuliah</label>
       <input type="text" class="form-control" id="subject" name="subject" required />
@@ -19,9 +19,10 @@
 
     <div class="mb-3">
       <label for="deadline" class="form-label">Deadline</label>
-      <input type="date" class="form-control" id="deadline" name="deadline" />
+      <input type="date" class="form-control" id="deadline" name="deadline" required />
     </div>
 
     <button class="btn btn-primary">Buat Assignment</button>
+    <a href="/assignments" class="btn btn-danger">Batal</a>
   </form>
 </div>

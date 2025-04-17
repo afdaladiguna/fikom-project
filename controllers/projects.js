@@ -21,14 +21,19 @@ module.exports.createProject = async (req, res, next) => {
   }));
   project.author = req.user._id;
   await project.save();
-  req.flash("success", "Successfully made a new project!");
+  req.flash("success", "Sukses mengumpulkan tugas!");
   res.redirect(`/projects/${project._id}`);
 };
 
 module.exports.showProject = async (req, res) => {
   const project = await Project.findById(req.params.id)
-    .populate({ path: "reviews", populate: { path: "author" } })
-    .populate("author");
+    .populate("author")
+    .populate("assignment")
+    .populate({
+      path: "reviews",
+      populate: { path: "author" },
+    });
+
   if (!project) {
     req.flash("error", "Cannot find that project!");
     return res.redirect("/projects");
@@ -64,7 +69,7 @@ module.exports.updateProject = async (req, res) => {
       $pull: { images: { filename: { $in: req.body.deleteImages } } },
     });
   }
-  req.flash("success", "Successfully update project!");
+  req.flash("success", "Sukses memperbarui tugas!");
   res.redirect(`/projects/${project._id}`);
 };
 
@@ -74,6 +79,6 @@ module.exports.deleteProject = async (req, res) => {
   for (let image of project.images) {
     await cloudinary.uploader.destroy(image.filename);
   }
-  req.flash("success", "Successfully deleted project!");
+  req.flash("success", "Sukses menghapus tugas!");
   res.redirect("/projects");
 };

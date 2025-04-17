@@ -32,19 +32,51 @@ module.exports.createAssignment = async (req, res) => {
   res.redirect("/assignments");
 };
 
+module.exports.renderEditForm = async (req, res) => {
+  const { id } = req.params;
+  const assignment = await Assignment.findById(id);
+  if (!assignment) {
+    req.flash("error", "Assignment tidak ditemukan.");
+    return res.redirect("/assignments");
+  }
+  res.render("assignments/edit", { assignment });
+};
+
+module.exports.updateAssignment = async (req, res) => {
+  const { id } = req.params;
+  const { title, subject, description, deadline } = req.body;
+
+  const assignment = await Assignment.findByIdAndUpdate(id, {
+    title,
+    subject,
+    description,
+    deadline,
+  });
+
+  req.flash("success", "Assignment berhasil diperbarui.");
+  res.redirect(`/assignments/${assignment._id}`);
+};
+
+module.exports.deleteAssignment = async (req, res) => {
+  const { id } = req.params;
+  await Assignment.findByIdAndDelete(id);
+  req.flash("success", "Assignment berhasil dihapus.");
+  res.redirect("/assignments");
+};
+
 module.exports.giveScore = async (req, res) => {
-  const { projectId } = req.params;
+  const { assignmentId, projectId } = req.params;
   const { score } = req.body;
 
   const project = await Project.findById(projectId);
   if (!project) {
     req.flash("error", "Proyek tidak ditemukan.");
-    return res.redirect("back");
+    return res.redirect("/assignments");
   }
 
   project.score = score;
   await project.save();
 
   req.flash("success", "Nilai berhasil diberikan.");
-  res.redirect("back");
+  res.redirect(`/assignments/${assignmentId}`);
 };
