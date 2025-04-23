@@ -1,0 +1,74 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="container my-4">
+  <h1 class="mb-3"><%= assignment.title %></h1>
+  <p><strong>Deskripsi:</strong> <%= assignment.description %></p>
+  <p><strong>Deadline:</strong> <%= assignment.dueDate.toDateString() %></p>
+  <p><strong>Kategori:</strong> <%= assignment.category %></p>
+  <p><strong>Jenis:</strong> <%= assignment.type %></p>
+
+  <% if (currentUser.role === 'dosen') { %>
+  <div class="d-flex gap-2 my-3">
+    <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>/edit" class="btn btn-warning">Edit</a>
+
+    <form action="/courses/<%= course._id %>/assignments/<%= assignment._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Yakin ingin menghapus assignment ini?')">
+      <button class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+
+  <h3 class="mt-5">Daftar Project Mahasiswa</h3>
+
+  <% if (projects.length > 0) { %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nama Mahasiswa</th>
+        <th>File</th>
+        <th>Catatan</th>
+        <th>Waktu Kumpul</th>
+        <th>Nilai</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% projects.forEach(project => { %>
+      <tr>
+        <td><%= project.student.name %></td>
+        <td><a href="<%= project.fileUrl %>" target="_blank">Lihat File</a></td>
+        <td><%= project.note || '-' %></td>
+        <td><%= project.submittedAt.toLocaleString() %></td>
+        <td><%= project.score ?? '-' %></td>
+        <td>
+          <form action="/projects/<%= project._id %>/score" method="POST" class="d-flex gap-2">
+            <input type="number" name="score" min="0" max="100" class="form-control form-control-sm" required />
+            <button class="btn btn-sm btn-primary">Beri Nilai</button>
+          </form>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <p class="text-muted">Belum ada project yang dikumpulkan.</p>
+  <% } %> <% } else if (currentUser.role === 'student') { %> <% const myProject = projects.find(p => p.student._id.toString() === currentUser._id.toString()); %> <% if (myProject) { %>
+  <h4 class="mt-4">Project Anda</h4>
+  <p><strong>Status:</strong> Sudah dikumpulkan</p>
+  <p><strong>Nilai:</strong> <%= myProject.score ?? 'Belum dinilai' %></p>
+  <a href="<%= myProject.fileUrl %>" target="_blank">Lihat File</a>
+  <p><strong>Catatan:</strong> <%= myProject.note || '-' %></p>
+  <% } else { %>
+  <h4 class="mt-4">Kumpulkan Project</h4>
+  <form action="/projects" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="assignmentId" value="<%= assignment._id %>" />
+    <div class="mb-3">
+      <label for="file" class="form-label">Upload File</label>
+      <input type="file" name="file" id="file" class="form-control" required />
+    </div>
+    <div class="mb-3">
+      <label for="note" class="form-label">Catatan</label>
+      <textarea name="note" id="note" class="form-control"></textarea>
+    </div>
+    <button class="btn btn-success">Kumpulkan</button>
+  </form>
+  <% } %> <% } %>
+</div>

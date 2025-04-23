@@ -30,6 +30,7 @@ const ProjectSchema = new Schema(
         ref: "Review",
       },
     ],
+    assignment: { type: mongoose.Schema.Types.ObjectId, ref: "Assignment" },
   },
   opts
 );

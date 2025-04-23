@@ -1,0 +1,51 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="row">
+  <h1 class="text-center">Edit Tugas: <%= assignment.title %></h1>
+  <div class="col-md-6 offset-md-3">
+    <form action="/courses/<%= courseId %>/assignments/<%= assignment._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+        <!--   res.render("assignments/edit", { courseId: id, assignment });
+ -->
+      <div class="mb-3">
+        <label class="form-label" for="title">Judul Tugas</label>
+        <input class="form-control" type="text" id="title" name="assignment[title]" value="<%= assignment.title %>" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="description">Deskripsi</label>
+        <textarea class="form-control" id="description" name="assignment[description]" rows="4" required><%= assignment.description %></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="dueDate">Tanggal Deadline</label>
+        <input class="form-control" type="datetime-local" id="dueDate" name="assignment[dueDate]" value="<%= assignment.dueDate.toISOString().slice(0, 16) %>" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="category">Kategori Tugas</label>
+        <select class="form-select" id="category" name="assignment[category]" required>
+          <option value="Mid" <%= assignment.category === 'Mid' ? 'selected' : '' %>>Mid</option>
+          <option value="Final" <%= assignment.category === 'Final' ? 'selected' : '' %>>Final</option>
+          <option value="Assignment" <%= assignment.category === 'Assignment' ? 'selected' : '' %>>Assignment</option>
+          <option value="Quiz" <%= assignment.category === 'Quiz' ? 'selected' : '' %>>Quiz</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label d-block">Jenis Tugas</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="assignment[type]" id="individual" value="Individual" <%= assignment.type === 'Individual' ? 'checked' : '' %> required />
+          <label class="form-check-label" for="individual">Individu</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="assignment[type]" id="group" value="Group" <%= assignment.type === 'Group' ? 'checked' : '' %> required />
+          <label class="form-check-label" for="group">Kelompok</label>
+        </div>
+      </div>
+
+      <div class="mb-3 py-2">
+        <button class="btn btn-success">Perbarui</button>
+      </div>
+    </form>
+  </div>
+</div>

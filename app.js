@@ -21,6 +21,9 @@ const User = require("./models/user");
 const userRoutes = require("./routes/users");
 const projectRoutes = require("./routes/projects");
 const reviewRoutes = require("./routes/reviews");
+const courseRoutes = require("./routes/courses");
+const assignmentRoutes = require("./routes/assignments");
+
 const dbUrl = process.env.DB_URL;
 
 mongoose.set("strictQuery", true);
@@ -113,6 +116,8 @@ app.use((req, res, next) => {
 app.use("/", userRoutes);
 app.use("/projects", projectRoutes);
 app.use("/projects/:id/reviews", reviewRoutes);
+app.use("/courses", courseRoutes);
+app.use("/courses/:id/assignments", assignmentRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");

@@ -1,0 +1,99 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="row">
+  <h1 class="text-center">Edit Mata Kuliah</h1>
+  <div class="col-md-6 offset-md-3">
+    <form action="/courses/<%= course._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="code">Kode Mata Kuliah</label>
+        <input class="form-control" hidden type="text" id="codeHidden" name="course[code]" value="<%= course.code %>" readonly required />
+        <input class="form-control" type="text" id="code" value="<%= course.code %>" readonly required disabled />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="name">Nama Mata Kuliah</label>
+        <input class="form-control" type="text" id="name" name="course[name]" value="<%= course.name %>" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="class">Kelas</label>
+        <select class="form-select" id="class" name="course[class]" required>
+          <option disabled value="">Pilih Kelas</option>
+          <% ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'].forEach(c => { %>
+            <option value="<%= c %>" <%= course.class === c ? 'selected' : '' %>><%= c %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="semester">Semester</label>
+        <select class="form-select" id="semester" name="course[semester]" required>
+          <option disabled value="">Pilih Semester</option>
+          <% for (let i = 1; i <= 8; i++) { %>
+            <option value="<%= i %>" <%= course.semester == i ? 'selected' : '' %>><%= i %></option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="academicYear">Tahun Ajaran</label>
+        <select class="form-select" id="academicYear" name="course[academicYear]" required>
+          <option disabled value="">Pilih Tahun Ajaran</option>
+          <% ['2022/2023', '2023/2024', '2024/2025', '2025/2026', '2026/2027'].forEach(y => { %>
+            <option value="<%= y %>" <%= course.academicYear === y ? 'selected' : '' %>><%= y %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="description">Deskripsi</label>
+        <textarea class="form-control" id="description" name="course[description]" rows="4" required><%= course.description %></textarea>
+      </div>
+
+      <div class="mb-3 py-2">
+        <button class="btn btn-primary">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const nameInput = document.getElementById("name");
+  const classInput = document.getElementById("class");
+  const semesterInput = document.getElementById("semester");
+  const yearInput = document.getElementById("academicYear");
+  const codeInput = document.getElementById("code");
+  const hiddenCodeInput = document.getElementById("codeHidden");
+
+  function generateCode() {
+    const name = nameInput.value.trim();
+    const classVal = classInput.value;
+    const semester = semesterInput.value;
+    const year = yearInput.value;
+
+    if (!name || !classVal || !semester || !year) {
+      codeInput.value = "";
+      hiddenCodeInput.value = "";
+      return;
+    }
+
+    const yearShort = year.split("/")[0].slice(2) + year.split("/")[1].slice(2);
+    const nameShort = name
+      .split(" ")
+      .map(word => word[0])
+      .join("")
+      .toUpperCase();
+
+    const code = `${yearShort}-${nameShort}-${classVal}-${semester}`;
+    codeInput.value = code;
+    hiddenCodeInput.value = code;
+  }
+
+  [nameInput, classInput, semesterInput, yearInput].forEach((input) => {
+    input.addEventListener("input", generateCode);
+    input.addEventListener("change", generateCode);
+  });
+
+  // Auto-generate once on page load in case values already filled
+  window.addEventListener("DOMContentLoaded", generateCode);
+</script>

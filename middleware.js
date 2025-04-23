@@ -30,6 +30,14 @@ module.exports.validateProject = (req, res, next) => {
   }
 };
 
+module.exports.isLecturer = async (req, res, next) => {
+  if (!req.isAuthenticated() || req.user.role !== "dosen") {
+    req.flash("error", "Hanya dosen yang dapat mengakses fitur ini.");
+    return res.redirect("/projects");
+  }
+  next();
+};
+
 module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
   const project = await Project.findById(id);

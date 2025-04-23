@@ -1,0 +1,47 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="container">
+  <h1 class="text-center my-4"><%= course.name %></h1>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Kode Mata Kuliah: <%= course.code %></h5>
+      <p><strong>Kelas:</strong> <%= course.class %></p>
+      <p><strong>Semester:</strong> <%= course.semester %></p>
+      <p><strong>Tahun Ajaran:</strong> <%= course.academicYear %></p>
+      <p><strong>Deskripsi:</strong></p>
+      <p><%= course.description %></p>
+      <a href="/courses/<%= course._id %>/assignments/new" class="btn btn-primary">Tambah Tugas</a>
+    </div>
+  </div>
+
+  <% if (course.assignments && course.assignments.length > 0) { %>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Daftar Tugas</h5>
+      <ul class="list-group list-group-flush">
+        <% course.assignments.forEach(assignment => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div>
+            <strong><%= assignment.title %></strong><br />
+            <small><%= assignment.description %></small>
+          </div>
+          <!-- <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>" class="btn btn-sm btn-outline-primary">Lihat Detail</a> -->
+          <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+        </li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+  <% } else { %>
+  <p class="text-muted">Belum ada tugas untuk mata kuliah ini.</p>
+  <% } %>
+
+  <div class="mt-4 d-flex gap-2">
+    <a href="/courses/<%= course._id %>/edit" class="btn btn-warning">Edit Mata Kuliah</a>
+
+    <form action="/courses/<%= course._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Yakin ingin menghapus mata kuliah ini?')">
+      <button class="btn btn-danger">Hapus</button>
+    </form>
+  </div>
+</div>
