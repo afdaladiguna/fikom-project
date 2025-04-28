@@ -1,7 +1,7 @@
 const Course = require("../models/course");
 
 module.exports.index = async (req, res) => {
-  const courses = await Course.find({ lecturer: req.user._id });
+  const courses = await Course.find();
   res.render("courses/index", { courses });
 };
 

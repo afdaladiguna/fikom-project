@@ -3,7 +3,7 @@
 <div class="container my-4">
   <h1 class="mb-3"><%= assignment.title %></h1>
   <p><strong>Deskripsi:</strong> <%= assignment.description %></p>
-  <p><strong>Deadline:</strong> <%= assignment.dueDate.toDateString() %></p>
+  <p><strong>Deadline:</strong> <%= assignment.dueDate?.toDateString() ?? '-' %></p>
   <p><strong>Kategori:</strong> <%= assignment.category %></p>
   <p><strong>Jenis:</strong> <%= assignment.type %></p>
 
@@ -33,11 +33,18 @@
     <tbody>
       <% projects.forEach(project => { %>
       <tr>
-        <td><%= project.student.name %></td>
-        <td><a href="<%= project.fileUrl %>" target="_blank">Lihat File</a></td>
+        <td><%= project.author?.name ?? '-' %></td>
+        <td>
+          <% if (project.repository) { %>
+          <a href="<%= project.repository %>" target="_blank">Lihat Repository</a>
+          <% } else if (project.images && project.images.length > 0) { %>
+          <a href="<%= project.images[0].url %>" target="_blank">Lihat File</a>
+          <% } else { %> Tidak ada file <% } %>
+        </td>
         <td><%= project.note || '-' %></td>
-        <td><%= project.submittedAt.toLocaleString() %></td>
+        <td><%= project.submittedAt ? project.submittedAt.toLocaleString() : '-' %></td>
         <td><%= project.score ?? '-' %></td>
+        <a href="/projects/<%= project._id %>" target="_blank">Lihat File</a>
         <td>
           <form action="/projects/<%= project._id %>/score" method="POST" class="d-flex gap-2">
             <input type="number" name="score" min="0" max="100" class="form-control form-control-sm" required />
@@ -50,25 +57,42 @@
   </table>
   <% } else { %>
   <p class="text-muted">Belum ada project yang dikumpulkan.</p>
-  <% } %> <% } else if (currentUser.role === 'student') { %> <% const myProject = projects.find(p => p.student._id.toString() === currentUser._id.toString()); %> <% if (myProject) { %>
+  <% } %> <% } else if (currentUser.role === 'mahasiswa') { %> <% const myProject = projects.find(p => (p.author?._id || p.author?.$oid || p.author)?.toString() === currentUser._id.toString()); %> <% if (myProject) { %>
   <h4 class="mt-4">Project Anda</h4>
   <p><strong>Status:</strong> Sudah dikumpulkan</p>
   <p><strong>Nilai:</strong> <%= myProject.score ?? 'Belum dinilai' %></p>
-  <a href="<%= myProject.fileUrl %>" target="_blank">Lihat File</a>
-  <p><strong>Catatan:</strong> <%= myProject.note || '-' %></p>
+  <a href="/projects/<%= myProject._id %>" target="_blank">Lihat File</a>
   <% } else { %>
   <h4 class="mt-4">Kumpulkan Project</h4>
   <form action="/projects" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="assignmentId" value="<%= assignment._id %>" />
+    <input type="hidden" name="project[assignment]" value="<%= assignment._id %>" />
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul Project</label>
+      <input type="text" name="project[title]" id="title" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Deskripsi</label>
+      <textarea name="project[description]" id="description" rows="5" class="form-control" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="repository" class="form-label">Repository (Opsional)</label>
+      <input type="url" name="project[repository]" id="repository" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="category">Kategori</label>
+      <input class="form-control" type="text" id="category" name="project[category]" required />
+    </div>
+
     <div class="mb-3">
       <label for="file" class="form-label">Upload File</label>
-      <input type="file" name="file" id="file" class="form-control" required />
+      <input type="file" name="image" id="file" class="form-control" multiple required />
     </div>
-    <div class="mb-3">
-      <label for="note" class="form-label">Catatan</label>
-      <textarea name="note" id="note" class="form-control"></textarea>
-    </div>
-    <button class="btn btn-success">Kumpulkan</button>
+
+    <button type="submit" class="btn btn-success">Kumpulkan</button>
   </form>
   <% } %> <% } %>
 </div>

@@ -11,7 +11,10 @@
       <p><strong>Tahun Ajaran:</strong> <%= course.academicYear %></p>
       <p><strong>Deskripsi:</strong></p>
       <p><%= course.description %></p>
+
+      <% if (currentUser.role === 'dosen') { %>
       <a href="/courses/<%= course._id %>/assignments/new" class="btn btn-primary">Tambah Tugas</a>
+      <% } %>
     </div>
   </div>
 
@@ -26,7 +29,6 @@
             <strong><%= assignment.title %></strong><br />
             <small><%= assignment.description %></small>
           </div>
-          <!-- <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>" class="btn btn-sm btn-outline-primary">Lihat Detail</a> -->
           <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
         </li>
         <% }); %>
@@ -35,8 +37,7 @@
   </div>
   <% } else { %>
   <p class="text-muted">Belum ada tugas untuk mata kuliah ini.</p>
-  <% } %>
-
+  <% } %> <% if (currentUser.role === 'dosen') { %>
   <div class="mt-4 d-flex gap-2">
     <a href="/courses/<%= course._id %>/edit" class="btn btn-warning">Edit Mata Kuliah</a>
 
@@ -44,4 +45,5 @@
       <button class="btn btn-danger">Hapus</button>
     </form>
   </div>
+  <% } %>
 </div>

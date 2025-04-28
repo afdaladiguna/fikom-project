@@ -4,7 +4,7 @@ const courses = require("../controllers/courses");
 const catchAsync = require("../utils/catchAsync");
 const { isLoggedIn, isLecturer } = require("../middleware");
 
-router.route("/").get(isLecturer, catchAsync(courses.index)).post(isLoggedIn, catchAsync(courses.createCourse));
+router.route("/").get(catchAsync(courses.index)).post(isLoggedIn, catchAsync(courses.createCourse));
 
 router.get("/new", isLoggedIn, courses.renderNewForm);
 

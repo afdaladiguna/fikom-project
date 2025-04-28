@@ -14,13 +14,8 @@ module.exports.register = async (req, res, next) => {
       name,
       role: "mahasiswa",
     });
-
-    const registeredUser = await User.register(user, password);
-    req.login(registeredUser, (err) => {
-      if (err) return next(err);
-      req.flash("success", "Registrasi berhasil!");
-      res.redirect("/projects");
-    });
+    req.flash("success", "Registrasi berhasil! Silahkan login.");
+    res.redirect("/login");
   } catch (e) {
     req.flash("error", "NIM sudah terdaftar.");
     console.log(e.message);

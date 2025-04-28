@@ -51,7 +51,7 @@ module.exports.showAssignment = async (req, res) => {
   const assignment = await Assignment.findById(assignmentId);
 
   // Mengambil semua proyek yang terkait dengan assignmentId
-  const projects = await Project.find({ assignment: assignmentId }).populate("student");
+  const projects = await Project.find({ assignment: assignmentId }).populate("author");
 
   if (!assignment) {
     req.flash("error", "Tugas tidak ditemukan.");

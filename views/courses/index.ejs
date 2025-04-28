@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate.ejs') %>
-<h1 class="fs-2 pb-3">Daftar Mata Kuliah Saya</h1>
+<h1 class="fs-2 pb-3">Daftar Mata Kuliah</h1>
 
 <div class="row">
   <% for (let course of courses) { %>
@@ -8,6 +8,7 @@
       <div class="card-body">
         <h5 class="card-title"><%= course.name %> (<%= course.code %>)</h5>
         <p class="card-text mb-1"><strong>Kelas:</strong> <%= course.class %></p>
+        <p class="card-text mb-1"><strong>Dosen Pengampu:</strong> <%= course.lecturer %></p>
         <p class="card-text mb-1"><strong>Semester:</strong> <%= course.semester %></p>
         <p class="card-text"><%= truncate(course.description, 100) %></p>
       </div>
