@@ -12,6 +12,7 @@
   "author": "afdal",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^9.7.0",
     "axios": "^1.5.1",
     "cloudinary": "^1.41.0",
     "connect-flash": "^0.1.1",

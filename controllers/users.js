@@ -1,4 +1,7 @@
 const User = require("../models/user");
+const Course = require("../models/course");
+const Assignment = require("../models/assignment");
+const Project = require("../models/project");
 
 module.exports.renderRegister = (req, res) => {
   res.render("./users/register");
@@ -14,11 +17,11 @@ module.exports.register = async (req, res, next) => {
       name,
       role: "mahasiswa",
     });
+    await User.register(user, password);
     req.flash("success", "Registrasi berhasil! Silahkan login.");
     res.redirect("/login");
   } catch (e) {
     req.flash("error", "NIM sudah terdaftar.");
-    console.log(e.message);
     res.redirect("/register");
   }
 };
@@ -46,5 +49,41 @@ module.exports.logout = (req, res, next) => {
     }
     req.flash("success", "Berhasil logout.");
     res.redirect("/");
+  });
+};
+
+module.exports.lecturerDashboard = async (req, res) => {
+  const lecturerId = req.user._id;
+
+  const courses = await Course.find({ lecturer: lecturerId }).populate("students").populate("assignments");
+
+  // Dapatkan semua assignments yang akan datang (deadline > hari ini)
+  const upcomingAssignments = await Assignment.find({
+    course: { $in: courses.map((c) => c._id) },
+    dueDate: { $gte: new Date() },
+  }).populate("course");
+
+  res.render("users/dashboard", { courses, upcomingAssignments });
+};
+
+module.exports.adminDashboard = async (req, res) => {
+  const totalCourses = await Course.countDocuments();
+  const totalStudents = await User.countDocuments({ role: "mahasiswa" });
+  const totalAssignments = await Assignment.countDocuments();
+
+  const upcomingAssignments = await Assignment.find({
+    dueDate: { $gte: new Date(), $lte: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) },
+  })
+    .limit(5)
+    .sort("dueDate");
+
+  const recentProjects = await Project.find().sort({ submittedAt: -1 }).limit(5).populate("author");
+
+  res.render("users/adminDashboard", {
+    totalCourses,
+    totalStudents,
+    totalAssignments,
+    upcomingAssignments,
+    recentProjects,
   });
 };

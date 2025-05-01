@@ -1,30 +1,47 @@
 <% layout('layouts/boilerplate.ejs') %>
+
+<script>
+  <% function truncate(text, maxLength) {
+      if (text && text.length > maxLength) {
+        return text.slice(0, maxLength) + "...";
+      }
+      return text;
+  } %>
+</script>
+
 <h1 class="fs-2 pb-3">Daftar Mata Kuliah</h1>
 
 <div class="row">
   <% for (let course of courses) { %>
-  <div class="col-lg-4">
-    <div class="card mb-4" style="height: 18rem">
-      <div class="card-body">
-        <h5 class="card-title"><%= course.name %> (<%= course.code %>)</h5>
-        <p class="card-text mb-1"><strong>Kelas:</strong> <%= course.class %></p>
-        <p class="card-text mb-1"><strong>Dosen Pengampu:</strong> <%= course.lecturer %></p>
-        <p class="card-text mb-1"><strong>Semester:</strong> <%= course.semester %></p>
-        <p class="card-text"><%= truncate(course.description, 100) %></p>
-      </div>
-      <div class="card-footer">
-        <a href="/courses/<%= course._id %>" class="btn btn-sm btn-warning">Lihat Detail</a>
+  <div class="col-12">
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body pb-2">
+        <h5 class="card-title mb-2"><%= course.name %> (<%= course.code %>)</h5>
+
+        <div class="text-muted" style="font-size: 0.95rem">
+          <p class="mb-0"><i class="bi bi-person-video3 me-1"></i><strong>Dosen:</strong> <%= course.lecturer.name %></p>
+          <p class="mb-0"><i class="bi bi-people-fill me-1"></i><strong>Kelas:</strong> <%= course.class %></p>
+          <p class="mb-0"><i class="bi bi-calendar3 me-1"></i><strong>Semester:</strong> <%= course.semester %></p>
+        </div>
+
+        <% if (course.description) { %>
+        <hr class="my-2" />
+        <p class="text-muted small mb-2"><%= truncate(course.description, 200) %></p>
+        <% } %>
+
+        <div class="d-flex justify-content-between align-items-center pt-2">
+          <a href="/courses/<%= course._id %>" class="btn btn-sm btn-warning">Lihat Detail</a>
+
+          <% if (currentUser.role === "mahasiswa") { %> <% if (course.students.some(s => s.equals(currentUser._id))) { %>
+          <button disabled class="btn btn-sm btn-secondary">Sudah Terdaftar</button>
+          <% } else { %>
+          <form action="/courses/<%= course._id %>/enroll" method="POST" class="m-0">
+            <button class="btn btn-sm btn-primary">Enroll</button>
+          </form>
+          <% } %> <% } %>
+        </div>
       </div>
     </div>
   </div>
   <% } %>
 </div>
-
-<script>
-  <% function truncate(text, maxLength) {
-    if (text && text.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
-  } %>
-</script>

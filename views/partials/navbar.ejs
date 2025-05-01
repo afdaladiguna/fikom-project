@@ -1,23 +1,50 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand text-warning" href="/"><span class="warning">FIKOM</span>Project</a>
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm" data-bs-theme="dark">
+  <div class="container-fluid text-light">
+    <a class="navbar-brand text-warning" href="/">FIKOMProject</a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link me-5" href="/">Home</a>
-        <a class="nav-link me-5" href="/projects">Proyek Mahasiswa</a>
-        <a class="nav-link me-5" href="/courses">Mata Kuliah</a>
+      <div class="navbar-nav me-auto">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/projects">Proyek Mahasiswa</a>
+        <a class="nav-link" href="/courses">Mata Kuliah</a>
+
+        <% if (currentUser) { %> <% if (currentUser.role === 'mahasiswa') { %>
+        <a class="nav-link" href="/projects/my-projects">Proyek Saya</a>
+        <a class="nav-link" href="/courses/my-courses">Mata Kuliah Saya</a>
+        <% } else if (currentUser.role === 'dosen') { %>
+        <a class="nav-link" href="/dashboard">Dashboard Dosen</a>
+        <% } %> <% } %>
       </div>
-      <div class="navbar-nav ms-auto">
-        <% if(!currentUser) { %>
+
+      <% if (!currentUser) { %>
+      <div class="navbar-nav">
         <a class="nav-link" href="/login">Login</a>
         <a class="nav-link" href="/register">Register</a>
-        <% } else { %>
-        <a class="nav-link" href="/logout">Logout</a>
-        <% } %>
       </div>
+      <% } else { %>
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 0.9rem"><%= currentUser.name.charAt(0).toUpperCase() %></div>
+          Hi, <%= currentUser.name %>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end w-100" aria-labelledby="userDropdown">
+          <li class="dropdown-item-text">
+            <strong><%= currentUser.name %></strong><br />
+            <% if(currentUser.role === "mahasiswa") { %>
+            <small class="text-muted">NIM: <%= currentUser.actualId %></small>
+            <% } else { %>
+            <small class="text-muted">NIDN: <%= currentUser.actualId %></small>
+            <% } %>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+        </ul>
+      </div>
+      <% } %>
     </div>
   </div>
 </nav>

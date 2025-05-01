@@ -1,8 +1,14 @@
 const Course = require("../models/course");
 
 module.exports.index = async (req, res) => {
-  const courses = await Course.find();
+  const courses = await Course.find().populate("lecturer");
   res.render("courses/index", { courses });
+};
+
+module.exports.myCourses = async (req, res) => {
+  const userId = req.user._id;
+  const courses = await Course.find({ students: userId }).populate("lecturer");
+  res.render("courses/my-courses", { courses });
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -46,5 +52,23 @@ module.exports.deleteCourse = async (req, res) => {
   const { id } = req.params;
   await Course.findByIdAndDelete(id);
   req.flash("success", "Mata kuliah berhasil dihapus.");
+  res.redirect("/courses");
+};
+
+module.exports.enroll = async (req, res) => {
+  const { id } = req.params;
+  const course = await Course.findById(id);
+
+  // Cek apakah user sudah terdaftar
+  const alreadyEnrolled = course.students.includes(req.user._id);
+  if (alreadyEnrolled) {
+    req.flash("info", "Kamu sudah terdaftar di mata kuliah ini.");
+    return res.redirect("/courses");
+  }
+
+  // Enroll user
+  course.students.push(req.user._id);
+  await course.save();
+  req.flash("success", "Berhasil mendaftar ke mata kuliah.");
   res.redirect("/courses");
 };

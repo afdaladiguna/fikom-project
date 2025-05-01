@@ -11,6 +11,8 @@ const Project = require("../models/project");
 
 router.route("/").get(isLoggedIn, catchAsync(projects.index)).post(isLoggedIn, upload.array("image"), catchAsync(projects.createProject));
 
+router.get("/my-projects", isLoggedIn, catchAsync(projects.myProjects));
+
 router.get("/new", isLoggedIn, projects.renderNewForm);
 
 router.route("/:id").get(catchAsync(projects.showProject)).put(isLoggedIn, isAuthor, upload.array("image"), catchAsync(projects.updateProject)).delete(isLoggedIn, isAuthor, catchAsync(projects.deleteProject));

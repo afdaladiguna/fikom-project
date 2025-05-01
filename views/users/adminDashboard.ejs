@@ -1,0 +1,54 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container my-4">
+  <h1>Dashboard Admin</h1>
+
+  <div class="row text-center my-4">
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5>Total Course</h5>
+          <p><%= totalCourses %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5>Total Mahasiswa</h5>
+          <p><%= totalStudents %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5>Total Assignment</h5>
+          <p><%= totalAssignments %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="mt-5">Tugas Mendekati Deadline</h3>
+  <% if (upcomingAssignments.length > 0) { %>
+  <ul>
+    <% upcomingAssignments.forEach(a => { %>
+    <li><%= a.title %> - <%= a.dueDate.toDateString() %></li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+  <p>Tidak ada tugas mendekati deadline.</p>
+  <% } %>
+
+  <h3 class="mt-4">Pengumpulan Terbaru</h3>
+  <% if (recentProjects.length > 0) { %>
+  <ul>
+    <% recentProjects.forEach(p => { %>
+    <li><%= p.author?.name || 'Unknown' %> - <%= p.title %></li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+  <p>Belum ada pengumpulan terbaru.</p>
+  <% } %>
+</div>

@@ -1,49 +1,84 @@
 <% layout('layouts/boilerplate.ejs') %>
 
-<div class="container">
-  <h1 class="text-center my-4"><%= course.name %></h1>
-
-  <div class="card mb-4">
+<div class="container py-4">
+  <div class="card shadow-sm mb-4">
     <div class="card-body">
-      <h5 class="card-title">Kode Mata Kuliah: <%= course.code %></h5>
-      <p><strong>Kelas:</strong> <%= course.class %></p>
-      <p><strong>Semester:</strong> <%= course.semester %></p>
-      <p><strong>Tahun Ajaran:</strong> <%= course.academicYear %></p>
-      <p><strong>Deskripsi:</strong></p>
-      <p><%= course.description %></p>
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h4 class="mb-1"><%= course.name %></h4>
+          <p class="mb-1 text-muted small"><%= course.code %> • Kelas <%= course.class %> • Semester <%= course.semester %> • TA <%= course.academicYear %></p>
+          <% if (course.lecturer && course.lecturer.name) { %>
+          <p class="mb-0 text-muted small">Dosen Pengampu: <%= course.lecturer.name %></p>
+          <% } %>
+        </div>
 
-      <% if (currentUser.role === 'dosen') { %>
-      <a href="/courses/<%= course._id %>/assignments/new" class="btn btn-primary">Tambah Tugas</a>
+        <% if (currentUser.role === 'dosen') { %>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/courses/<%= course._id %>/edit">Edit Mata Kuliah</a></li>
+            <li>
+              <form action="/courses/<%= course._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Yakin ingin menghapus mata kuliah ini?')">
+                <button type="submit" class="dropdown-item text-danger">Hapus Mata Kuliah</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+        <% } %>
+      </div>
+
+      <% if (course.description) { %>
+      <hr />
+      <p class="mb-0"><%= course.description %></p>
       <% } %>
     </div>
   </div>
 
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Daftar Tugas</h5>
+    <% if (currentUser.role === 'dosen') { %>
+    <a href="/courses/<%= course._id %>/assignments/new" class="btn btn-sm btn-primary">+ Tambah Tugas</a>
+    <% } %>
+  </div>
+
   <% if (course.assignments && course.assignments.length > 0) { %>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Daftar Tugas</h5>
-      <ul class="list-group list-group-flush">
-        <% course.assignments.forEach(assignment => { %>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div>
-            <strong><%= assignment.title %></strong><br />
-            <small><%= assignment.description %></small>
+  <div class="row">
+    <% course.assignments.forEach(assignment => { %>
+    <div class="col-md-12">
+      <div class="card mb-3 shadow-sm position-relative">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="mb-1"><%= assignment.title %></h6>
+              <p class="mb-1 text-muted small"><%= assignment.category %> • <%= assignment.type %> • <%= new Date(assignment.dueDate).toLocaleDateString("id-ID") %></p>
+            </div>
+            <% if (currentUser.role === 'dosen') { %>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/courses/<%= course._id %>/assignments/<%= assignment._id %>/edit">Edit</a></li>
+                <li>
+                  <form action="/courses/<%= course._id %>/assignments/<%= assignment._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Hapus tugas ini?')">
+                    <button class="dropdown-item text-danger" type="submit">Hapus</button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+            <% } %>
           </div>
+
+          <p class="text-muted small mt-2 mb-1"><%= assignment.description %></p>
           <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
-        </li>
-        <% }); %>
-      </ul>
+        </div>
+      </div>
     </div>
+    <% }); %>
   </div>
   <% } else { %>
-  <p class="text-muted">Belum ada tugas untuk mata kuliah ini.</p>
-  <% } %> <% if (currentUser.role === 'dosen') { %>
-  <div class="mt-4 d-flex gap-2">
-    <a href="/courses/<%= course._id %>/edit" class="btn btn-warning">Edit Mata Kuliah</a>
-
-    <form action="/courses/<%= course._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Yakin ingin menghapus mata kuliah ini?')">
-      <button class="btn btn-danger">Hapus</button>
-    </form>
-  </div>
+  <div class="text-muted fst-italic">Belum ada tugas yang terdaftar.</div>
   <% } %>
 </div>

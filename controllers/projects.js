@@ -8,6 +8,11 @@ module.exports.index = async (req, res) => {
   res.render("projects/index", { projects });
 };
 
+module.exports.myProjects = async (req, res) => {
+  const projects = await Project.find({ author: req.user._id });
+  res.render("projects/my-projects", { projects });
+};
+
 module.exports.renderNewForm = (req, res) => {
   res.render("projects/new");
 };
