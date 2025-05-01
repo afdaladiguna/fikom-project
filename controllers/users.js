@@ -33,7 +33,19 @@ module.exports.renderLogin = (req, res) => {
 module.exports.login = (req, res) => {
   try {
     req.flash("success", "Berhasil login.");
-    const redirectUrl = res.locals.returnTo || "/projects"; // update this line to use res.locals.returnTo now
+
+    const user = req.user; // Berisi data user yang baru saja login
+
+    let redirectUrl = "/projects"; // fallback
+
+    if (user.role === "dosen") {
+      redirectUrl = "/dashboard";
+    } else if (user.role === "admin") {
+      redirectUrl = "/admin/dashboard";
+    } else if (user.role === "mahasiswa") {
+      redirectUrl = "/courses";
+    }
+
     res.redirect(redirectUrl);
   } catch (e) {
     req.flash("error", "NIM belum terdaftar atau password salah.");
@@ -57,13 +69,12 @@ module.exports.lecturerDashboard = async (req, res) => {
 
   const courses = await Course.find({ lecturer: lecturerId }).populate("students").populate("assignments");
 
-  // Dapatkan semua assignments yang akan datang (deadline > hari ini)
   const upcomingAssignments = await Assignment.find({
     course: { $in: courses.map((c) => c._id) },
     dueDate: { $gte: new Date() },
   }).populate("course");
 
-  res.render("users/dashboard", { courses, upcomingAssignments });
+  res.render("users/dashboard", { user: req.user, courses, upcomingAssignments });
 };
 
 module.exports.adminDashboard = async (req, res) => {

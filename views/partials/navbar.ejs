@@ -17,6 +17,9 @@
         <a class="nav-link" href="/courses/my-courses">Mata Kuliah Saya</a>
         <% } else if (currentUser.role === 'dosen') { %>
         <a class="nav-link" href="/dashboard">Dashboard Dosen</a>
+        <% } else if (currentUser.role === 'admin') { %>
+        <a class="nav-link" href="/admin/dashboard">Dashboard Admin</a>
+
         <% } %> <% } %>
       </div>
 

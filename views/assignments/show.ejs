@@ -5,10 +5,15 @@
     <div class="card-body d-flex justify-content-between align-items-start">
       <div>
         <h3 class="card-title mb-2"><%= assignment.title %></h3>
+        <% if (assignment.description) { %>
         <p class="mb-1"><strong>Deskripsi:</strong> <%= assignment.description %></p>
-        <p class="mb-1"><strong>Deadline:</strong> <%= assignment.dueDate?.toDateString() ?? '-' %></p>
+        <% } %> <% if (assignment.dueDate) { %>
+        <p class="mb-1"><strong>Deadline:</strong> <%= assignment.dueDate.toDateString() %></p>
+        <% } %> <% if (assignment.category) { %>
         <p class="mb-1"><strong>Kategori:</strong> <%= assignment.category %></p>
+        <% } %> <% if (assignment.type) { %>
         <p class="mb-1"><strong>Jenis:</strong> <%= assignment.type %></p>
+        <% } %>
       </div>
 
       <% if (currentUser.role === 'dosen') { %>
@@ -42,8 +47,7 @@
         <tr>
           <th>Nama Mahasiswa</th>
           <th>File</th>
-          <th>Catatan</th>
-          <th>Waktu Kumpul</th>
+          <th>Repository</th>
           <th>Nilai</th>
           <th>Aksi</th>
         </tr>
@@ -53,19 +57,22 @@
         <tr>
           <td><%= project.author?.name ?? '-' %></td>
           <td>
+            <a href="/projects/<%= project._id %>" target="_blank"> Lihat Detail </a>
+          </td>
+          <td>
             <% if (project.repository) { %>
             <a href="<%= project.repository %>" target="_blank">Repository</a>
             <% } else if (project.images && project.images.length > 0) { %>
             <a href="<%= project.images[0].url %>" target="_blank">File</a>
             <% } else { %> Tidak ada file <% } %>
           </td>
-          <td><%= project.note || '-' %></td>
-          <td><%= project.submittedAt ? project.submittedAt.toLocaleString() : '-' %></td>
           <td><%= project.score ?? '-' %></td>
           <td>
-            <form action="/projects/<%= project._id %>/score" method="POST" class="d-flex gap-2">
-              <input type="number" name="score" min="0" max="100" class="form-control form-control-sm" required />
-              <button class="btn btn-sm btn-primary">Nilai</button>
+            <form action="/projects/<%= project._id %>/score" method="POST">
+              <input type="hidden" name="courseId" value="<%= course._id %>" />
+              <input type="hidden" name="assignmentId" value="<%= assignment._id %>" />
+              <input type="number" name="score" min="0" max="100" required />
+              <button class="btn btn-primary">Nilai</button>
             </form>
           </td>
         </tr>
@@ -75,50 +82,5 @@
   </div>
   <% } else { %>
   <p class="text-muted mt-3">Belum ada project yang dikumpulkan.</p>
-  <% } %> <% } else if (currentUser.role === 'mahasiswa') { %> <% const myProject = projects.find(p => (p.author?._id || p.author?.$oid || p.author)?.toString() === currentUser._id.toString()); %> <% if (myProject) { %>
-  <div class="card mt-4">
-    <div class="card-body">
-      <h5>Project Anda</h5>
-      <p><strong>Status:</strong> Sudah dikumpulkan</p>
-      <p><strong>Nilai:</strong> <%= myProject.score ?? 'Belum dinilai' %></p>
-      <a href="/projects/<%= myProject._id %>" class="btn btn-outline-primary btn-sm" target="_blank">Lihat File</a>
-    </div>
-  </div>
-  <% } else { %>
-  <div class="card mt-4">
-    <div class="card-body">
-      <h5>Kumpulkan Project</h5>
-      <form action="/projects" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="project[assignment]" value="<%= assignment._id %>" />
-
-        <div class="mb-3">
-          <label for="title" class="form-label">Judul Project</label>
-          <input type="text" name="project[title]" id="title" class="form-control" required />
-        </div>
-
-        <div class="mb-3">
-          <label for="description" class="form-label">Deskripsi</label>
-          <textarea name="project[description]" id="description" rows="5" class="form-control" required></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="repository" class="form-label">Repository (Opsional)</label>
-          <input type="url" name="project[repository]" id="repository" class="form-control" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="category">Kategori</label>
-          <input class="form-control" type="text" id="category" name="project[category]" required />
-        </div>
-
-        <div class="mb-3">
-          <label for="file" class="form-label">Upload File</label>
-          <input type="file" name="image" id="file" class="form-control" multiple required />
-        </div>
-
-        <button type="submit" class="btn btn-success">Kumpulkan</button>
-      </form>
-    </div>
-  </div>
   <% } %> <% } %>
 </div>

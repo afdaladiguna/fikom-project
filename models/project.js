@@ -20,6 +20,7 @@ const ProjectSchema = new Schema(
     repository: String,
     category: String,
     images: [ImageSchema],
+    score: Number,
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",

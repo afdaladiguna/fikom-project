@@ -47,6 +47,13 @@ module.exports.isAuthor = async (req, res, next) => {
   }
   next();
 };
+module.exports.isAdmin = (req, res, next) => {
+  if (!req.isAuthenticated() || req.user.role !== "admin") {
+    req.flash("error", "Hanya admin yang dapat mengakses halaman ini.");
+    return res.redirect("/");
+  }
+  next();
+};
 
 module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, reviewId } = req.params;

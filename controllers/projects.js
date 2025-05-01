@@ -81,3 +81,26 @@ module.exports.deleteProject = async (req, res) => {
   req.flash("success", "Successfully deleted project!");
   res.redirect("/projects");
 };
+
+module.exports.giveScore = async (req, res) => {
+  const { id } = req.params; // ini projectId
+  const { score, courseId, assignmentId } = req.body;
+
+  const project = await Project.findById(id);
+  if (!project) {
+    req.flash("error", "Project tidak ditemukan.");
+    return res.redirect(`/courses/${courseId}/assignments/${assignmentId}`);
+  }
+
+  const numericScore = parseInt(score);
+  if (isNaN(numericScore) || numericScore < 0 || numericScore > 100) {
+    req.flash("error", "Nilai harus antara 0 dan 100.");
+    return res.redirect(`/courses/${courseId}/assignments/${assignmentId}`);
+  }
+
+  project.score = numericScore;
+  await project.save();
+
+  req.flash("success", "Nilai berhasil diberikan.");
+  res.redirect(`/courses/${courseId}/assignments/${assignmentId}`);
+};

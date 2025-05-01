@@ -20,7 +20,7 @@ module.exports.createCourse = async (req, res) => {
   course.lecturer = req.user._id;
   await course.save();
   req.flash("success", "Mata kuliah berhasil dibuat!");
-  res.redirect("/courses");
+  res.redirect("/dashboard");
 };
 
 module.exports.showCourse = async (req, res) => {

@@ -16,6 +16,7 @@ router.get("/my-projects", isLoggedIn, catchAsync(projects.myProjects));
 router.get("/new", isLoggedIn, projects.renderNewForm);
 
 router.route("/:id").get(catchAsync(projects.showProject)).put(isLoggedIn, isAuthor, upload.array("image"), catchAsync(projects.updateProject)).delete(isLoggedIn, isAuthor, catchAsync(projects.deleteProject));
+router.post("/:id/score", isLoggedIn, catchAsync(projects.giveScore));
 
 router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(projects.renderEditForm));
 
