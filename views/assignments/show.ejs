@@ -9,6 +9,12 @@
         <p class="mb-1"><strong>Deadline:</strong> <%= assignment.dueDate?.toDateString() ?? '-' %></p>
         <p class="mb-1"><strong>Kategori:</strong> <%= assignment.category %></p>
         <p class="mb-1"><strong>Jenis:</strong> <%= assignment.type %></p>
+        <% if (assignment.file && assignment.file.url) { %>
+        <p class="mb-1">
+          <strong>File Tugas:</strong>
+          <a href="<%= assignment.file.url %>" download target="_blank"> 📄 <%= assignment.file.filename ?? 'Unduh File' %> </a>
+        </p>
+        <% } %>
       </div>
 
       <% if (currentUser.role === 'dosen') { %>
@@ -63,9 +69,15 @@
           <td><%= project.submittedAt ? project.submittedAt.toLocaleString() : '-' %></td>
           <td><%= project.score ?? '-' %></td>
           <td>
-            <form action="/projects/<%= project._id %>/score" method="POST" class="d-flex gap-2">
-              <input type="number" name="score" min="0" max="100" class="form-control form-control-sm" required />
-              <button class="btn btn-sm btn-primary">Nilai</button>
+            <form action="/projects/<%= project._id %>/score" method="POST" class="d-flex flex-column gap-2">
+              <input type="hidden" name="courseId" value="<%= course._id %>" />
+              <input type="hidden" name="assignmentId" value="<%= assignment._id %>" />
+
+              <input type="number" name="score" default="0" min="0" max="100" class="form-control form-control-sm" placeholder="Nilai" value="<%= project.score %>" required />
+
+              <textarea name="note" rows="2" class="form-control form-control-sm" placeholder="Catatan dari dosen (opsional)"><%= project.note || '' %></textarea>
+
+              <button class="btn btn-sm btn-primary mt-1">Nilai</button>
             </form>
           </td>
         </tr>
@@ -81,7 +93,8 @@
       <h5>Project Anda</h5>
       <p><strong>Status:</strong> Sudah dikumpulkan</p>
       <p><strong>Nilai:</strong> <%= myProject.score ?? 'Belum dinilai' %></p>
-      <a href="/projects/<%= myProject._id %>" class="btn btn-outline-primary btn-sm" target="_blank">Lihat File</a>
+      <p><strong>Catatan:</strong> <%= myProject.note ?? 'Belum ada catatan' %></p>
+      <a href="/projects/<%= myProject._id %>" class="btn btn-outline-primary btn-sm" target="_blank">Lihat Tugas</a>
     </div>
   </div>
   <% } else { %>
@@ -93,7 +106,7 @@
 
         <div class="mb-3">
           <label for="title" class="form-label">Judul Project</label>
-          <input type="text" name="project[title]" id="title" class="form-control" required />
+          <input type="text" name="project[title]" id="title" placeholder="Contoh: Sistem Manajemen Barang" class="form-control" required />
         </div>
 
         <div class="mb-3">
@@ -102,18 +115,18 @@
         </div>
 
         <div class="mb-3">
-          <label for="repository" class="form-label">Repository (Opsional)</label>
-          <input type="url" name="project[repository]" id="repository" class="form-control" />
+          <label for="repository" class="form-label">Link Repository <small class="text-muted">(GitHub, Google Drive, dll.)</small></label>
+          <input type="url" name="project[repository]" id="repository" class="form-control" placeholder="Contoh: https://github.com/username/project" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="category">Kategori</label>
-          <input class="form-control" type="text" id="category" name="project[category]" required />
+          <label class="form-label" for="category">Keyword Project</label>
+          <input class="form-control" type="text" id="category" name="project[category]" placeholder="Contoh: Website, Mobile App, Machine Learning, dsb." required />
         </div>
 
         <div class="mb-3">
-          <label for="file" class="form-label">Upload File</label>
-          <input type="file" name="image" id="file" class="form-control" multiple required />
+          <label for="file" class="form-label">Upload Screenshot Project <small class="text-muted">(Overview dari project anda)</small></label>
+          <input type="file" name="image" id="file" class="form-control" accept="image/*" multiple required />
         </div>
 
         <button type="submit" class="btn btn-success">Kumpulkan</button>

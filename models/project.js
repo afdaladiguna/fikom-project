@@ -15,12 +15,16 @@ const opts = { toJSON: { virtuals: true } };
 
 const ProjectSchema = new Schema(
   {
-    title: String,
-    description: String,
-    repository: String,
-    category: String,
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    repository: { type: String, required: true },
+    category: { type: String, required: true },
     images: [ImageSchema],
     score: Number,
+    note: {
+      type: String,
+      default: "",
+    },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",

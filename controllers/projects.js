@@ -1,11 +1,29 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable prefer-const */
 const Project = require("../models/project");
+const Course = require("../models/course");
+const Assignment = require("../models/assignment");
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
-  const projects = await Project.find({});
-  res.render("projects/index", { projects });
+  const { keyword, courseId } = req.query;
+
+  let query = {};
+
+  if (keyword) {
+    query.$or = [{ title: { $regex: keyword, $options: "i" } }, { description: { $regex: keyword, $options: "i" } }, { category: { $regex: keyword, $options: "i" } }];
+  }
+
+  let projects = await Project.find(query).populate("assignment");
+  const courses = await Course.find({});
+
+  if (courseId) {
+    projects = projects.filter((project) => {
+      return project.assignment && project.assignment.course.toString() === courseId;
+    });
+  }
+
+  res.render("projects/index", { projects, keyword, courseId, courses });
 };
 
 module.exports.myProjects = async (req, res) => {
@@ -31,8 +49,13 @@ module.exports.createProject = async (req, res, next) => {
 
 module.exports.showProject = async (req, res) => {
   const project = await Project.findById(req.params.id)
+    .populate({
+      path: "assignment",
+      populate: { path: "course" }, // agar bisa akses assignment.course.name
+    })
     .populate({ path: "reviews", populate: { path: "author" } })
     .populate("author");
+
   if (!project) {
     req.flash("error", "Cannot find that project!");
     return res.redirect("/projects");
@@ -83,8 +106,8 @@ module.exports.deleteProject = async (req, res) => {
 };
 
 module.exports.giveScore = async (req, res) => {
-  const { id } = req.params; // ini projectId
-  const { score, courseId, assignmentId } = req.body;
+  const { id } = req.params; // project ID
+  const { score, note, courseId, assignmentId } = req.body;
 
   const project = await Project.findById(id);
   if (!project) {
@@ -99,8 +122,9 @@ module.exports.giveScore = async (req, res) => {
   }
 
   project.score = numericScore;
+  project.note = note || "";
   await project.save();
 
-  req.flash("success", "Nilai berhasil diberikan.");
+  req.flash("success", "Nilai dan catatan berhasil diberikan.");
   res.redirect(`/courses/${courseId}/assignments/${assignmentId}`);
 };

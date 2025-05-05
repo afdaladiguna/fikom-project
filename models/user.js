@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 const passportLocalMongoose = require("passport-local-mongoose");
 
 const UserSchema = new Schema({
-  name: String,
+  name: { type: String, required: true },
   role: {
     type: String,
     enum: ["mahasiswa", "dosen", "admin"],
@@ -14,7 +14,7 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  actualId: String, // menyimpan NIM jika mahasiswa, atau NIDN jika dosen
+  actualId: { type: String, required: true }, // menyimpan NIM jika mahasiswa, atau NIDN jika dosen
 });
 
 UserSchema.plugin(passportLocalMongoose); // menggunakan "username" sebagai default

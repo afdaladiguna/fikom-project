@@ -1,6 +1,32 @@
 <% layout('layouts/boilerplate.ejs') %>
 <h1 class="fs-2 pb-3">Semua Proyek Mahasiswa</h1>
 
+<form method="GET" action="/projects" class="mb-4">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-4">
+      <label class="form-label">Keyword</label>
+      <input type="text" class="form-control" name="keyword" value="<%= typeof keyword !== 'undefined' ? keyword : '' %>" placeholder="Cari judul, deskripsi, kategori..." />
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label">Mata Kuliah</label>
+      <select name="courseId" class="form-select">
+        <option value="">-- Semua --</option>
+        <% for(let course of courses) { %>
+          <option value="<%= course._id %>" <%= course._id.toString() === courseId ? 'selected' : '' %>>
+            <%= course.name %>
+          </option>
+        <% } %>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+  </div>
+</form>
+
+
 <div class="row">
   <% for(let project of projects) { %>
 

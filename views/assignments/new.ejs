@@ -3,21 +3,43 @@
 <div class="row">
   <h1 class="text-center">Tambah Tugas untuk Mata Kuliah <%= course.name %></h1>
   <div class="col-md-6 offset-md-3">
-    <form action="/courses/<%= course._id %>/assignments" method="POST" class="needs-validation" novalidate>
+    <form action="/courses/<%= course._id %>/assignments" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
       <div class="mb-3">
         <label class="form-label" for="title">Judul Tugas</label>
-        <input class="form-control" type="text" id="title" name="assignment[title]" required />
+        <input class="form-control" type="text" id="title" name="assignment[title]" placeholder="Contoh: Tugas 1, Tugas 2, Tugas MID, Quiz Ke-3, dsb." required />
       </div>
 
       <div class="mb-3">
         <label class="form-label" for="description">Deskripsi</label>
-        <textarea class="form-control" id="description" name="assignment[description]" rows="4" required></textarea>
+        <textarea
+          class="form-control"
+          id="description"
+          name="assignment[description]"
+          rows="6"
+          placeholder="Contoh: Mahasiswa membuat aplikasi CRUD sederhana menggunakan PHP dan MySQL.
+Rubrik penilaian:
+1. Fungsionalitas (50%), 
+2. UI/UX (30%), dan 
+3. Dokumentasi (20%)."
+          required
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="pdf">Unggah File (PDF)</label>
+        <input class="form-control" type="file" id="pdf" name="pdfFile" accept="application/pdf" />
+        <small class="form-text text-muted">Format file harus PDF. Maksimal ukuran 5MB.</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="startDate">Tanggal Mulai Pengumpulan</label>
+        <input class="form-control" type="datetime-local" id="startDate" name="assignment[startDate]" required min="" />
       </div>
 
       <div class="mb-3">
         <label class="form-label" for="dueDate">Tanggal Deadline</label>
-        <input class="form-control" type="datetime-local" id="dueDate" name="assignment[dueDate]" required />
+        <input class="form-control" type="datetime-local" id="dueDate" name="assignment[dueDate]" required min="" />
       </div>
+
       <div class="mb-3">
         <label class="form-label" for="category">Kategori Tugas</label>
         <select class="form-select" id="category" name="assignment[category]" required>
@@ -47,3 +69,30 @@
     </form>
   </div>
 </div>
+
+<script>
+  const startDateInput = document.getElementById("startDate");
+  const dueDateInput = document.getElementById("dueDate");
+
+  function setInitialMinDate() {
+    const now = new Date();
+    now.setSeconds(0, 0);
+    const isoNow = now.toISOString().slice(0, 16);
+
+    startDateInput.min = isoNow;
+    dueDateInput.min = isoNow;
+  }
+
+  function updateDueDateMin() {
+    if (startDateInput.value) {
+      dueDateInput.min = startDateInput.value;
+      if (dueDateInput.value && dueDateInput.value < startDateInput.value) {
+        dueDateInput.value = startDateInput.value;
+      }
+    }
+  }
+
+  startDateInput.addEventListener("change", updateDueDateMin);
+
+  setInitialMinDate();
+</script>

@@ -20,14 +20,22 @@ module.exports.createAssignment = async (req, res) => {
     return res.redirect("/courses");
   }
 
-  const assignment = new Assignment({
+  const assignmentData = {
     ...req.body.assignment,
     course: id,
-  });
+  };
 
+  // Handle file PDF jika ada
+  if (req.file) {
+    assignmentData.file = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+  }
+
+  const assignment = new Assignment(assignmentData);
   await assignment.save();
 
-  // Tambahkan ke daftar assignments di course
   course.assignments.push(assignment._id);
   await course.save();
 
@@ -73,7 +81,20 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateAssignment = async (req, res) => {
   const { id, assignmentId } = req.params;
-  await Assignment.findByIdAndUpdate(assignmentId, { ...req.body.assignment });
+  const assignment = await Assignment.findById(assignmentId);
+
+  // Update basic fields
+  assignment.set(req.body.assignment);
+
+  // Ganti file PDF jika ada upload baru
+  if (req.file) {
+    assignment.file = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+  }
+
+  await assignment.save();
   req.flash("success", "Tugas berhasil diperbarui.");
   res.redirect(`/courses/${id}`);
 };

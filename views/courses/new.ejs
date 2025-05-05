@@ -12,7 +12,12 @@
 
       <div class="mb-3">
         <label class="form-label" for="name">Nama Mata Kuliah</label>
-        <input class="form-control" type="text" id="name" name="course[name]" required />
+        <select class="form-select" id="name" name="course[name]" required>
+          <option disabled selected value="">Pilih Mata Kuliah</option>
+          <% subjects.forEach(subject => { %>
+          <option value="<%= subject.name %>"><%= subject.name %></option>
+          <% }) %>
+        </select>
       </div>
 
       <div class="mb-3">
@@ -47,7 +52,14 @@
 
       <div class="mb-3">
         <label class="form-label" for="description">Deskripsi</label>
-        <textarea class="form-control" id="description" name="course[description]" rows="4" required></textarea>
+        <textarea
+          class="form-control"
+          id="description"
+          name="course[description]"
+          rows="4"
+          placeholder="Contoh: Mata kuliah ini membahas mengenai konsep-konsep fundamental system basis data dan manfaatnya, bagaimana mengembangkan basis data, mendesain basis data dan sebagainya."
+          required
+        ></textarea>
       </div>
 
       <div class="mb-3 py-2">

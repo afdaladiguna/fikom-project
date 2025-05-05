@@ -1,4 +1,5 @@
 const Course = require("../models/course");
+const Subject = require("../models/subject");
 
 module.exports.index = async (req, res) => {
   const courses = await Course.find().populate("lecturer");
@@ -11,8 +12,9 @@ module.exports.myCourses = async (req, res) => {
   res.render("courses/my-courses", { courses });
 };
 
-module.exports.renderNewForm = (req, res) => {
-  res.render("courses/new");
+module.exports.renderNewForm = async (req, res) => {
+  const subjects = await Subject.find({});
+  res.render("courses/new", { subjects });
 };
 
 module.exports.createCourse = async (req, res) => {
