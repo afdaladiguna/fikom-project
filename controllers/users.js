@@ -98,3 +98,32 @@ module.exports.adminDashboard = async (req, res) => {
     recentProjects,
   });
 };
+
+module.exports.adminCourseList = async (req, res) => {
+  const courses = await Course.find({});
+  res.render("admin/course-list", { courses });
+};
+module.exports.renderEditCourse = async (req, res) => {
+  const { id } = req.params;
+  const course = await Course.findById(id);
+  if (!course) {
+    req.flash("error", "Mata kuliah tidak ditemukan.");
+    return res.redirect("/admin/courses");
+  }
+  res.render("admin/edit-course", { course });
+};
+
+module.exports.updateCourse = async (req, res) => {
+  const { id } = req.params;
+  const { name, description } = req.body.course;
+  await Course.findByIdAndUpdate(id, { name, description });
+  req.flash("success", "Berhasil mengupdate mata kuliah.");
+  res.redirect("/admin/courses");
+};
+
+module.exports.deleteCourse = async (req, res) => {
+  const { id } = req.params;
+  await Course.findByIdAndDelete(id);
+  req.flash("success", "Berhasil menghapus mata kuliah.");
+  res.redirect("/admin/courses");
+};

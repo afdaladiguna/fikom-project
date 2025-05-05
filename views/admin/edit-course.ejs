@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container my-4">
+  <h2>Edit Mata Kuliah</h2>
+  <form action="/admin/course/<%= course._id %>?_method=PUT" method="POST">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nama Mata Kuliah</label>
+      <input type="text" name="course[name]" class="form-control" id="name" value="<%= course.name %>" required />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Deskripsi</label>
+      <textarea name="course[description]" class="form-control" id="description" rows="3"><%= course.description %></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Simpan</button>
+    <a href="/admin/course" class="btn btn-secondary">Kembali</a>
+  </form>
+</div>

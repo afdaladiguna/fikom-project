@@ -26,5 +26,9 @@ router.get("/logout", users.logout);
 router.get("/dashboard", isLoggedIn, isLecturer, users.lecturerDashboard);
 
 router.get("/admin/dashboard", isLoggedIn, isAdmin, users.adminDashboard);
+router.get("/admin/courses", isLoggedIn, isAdmin, catchAsync(users.adminCourseList));
+router.get("/admin/courses/:id/edit", isLoggedIn, isAdmin, catchAsync(users.renderEditCourse));
+router.put("/admin/courses/:id", isLoggedIn, isAdmin, catchAsync(users.updateCourse));
+router.delete("/admin/courses/:id", isLoggedIn, isAdmin, catchAsync(users.deleteCourse));
 
 module.exports = router;

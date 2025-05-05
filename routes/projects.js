@@ -9,7 +9,7 @@ const upload = multer({ storage });
 
 const Project = require("../models/project");
 
-router.route("/").get(isLoggedIn, catchAsync(projects.index)).post(isLoggedIn, upload.array("image"), catchAsync(projects.createProject));
+router.route("/").get(catchAsync(projects.index)).post(isLoggedIn, upload.array("image"), catchAsync(projects.createProject));
 
 router.get("/my-projects", isLoggedIn, catchAsync(projects.myProjects));
 

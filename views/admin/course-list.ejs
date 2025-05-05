@@ -1,0 +1,29 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container my-4">
+  <h2>📚 Daftar Mata Kuliah</h2>
+
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>Nama Mata Kuliah</th>
+        <th>Deskripsi</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% courses.forEach(course => { %>
+      <tr>
+        <td><%= course.name %></td>
+        <td><%= course.description %></td>
+        <td>
+          <a href="/admin/courses/<%= course._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+          <form action="/admin/courses/<%= course._id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
