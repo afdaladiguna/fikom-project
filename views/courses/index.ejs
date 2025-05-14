@@ -9,19 +9,30 @@
   } %>
 </script>
 
-<h1 class="fs-2 pb-3">Daftar Mata Kuliah</h1>
+<h1 class="fs-2 pb-3">🧑‍🏫Daftar Kelas</h1>
+
+<form class="row g-3 mb-4" method="GET" action="/courses">
+  <div class="col-md-4">
+    <label class="form-label">Search</label>
+    <input type="text" class="form-control" name="keyword" value="<%= typeof keyword !== 'undefined' ? keyword : '' %>" placeholder="Cari kode, nama, kelas, dosen..." />
+  </div>
+  <div class="col-md-2 d-flex align-items-end">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
 
 <div class="row">
   <% for (let course of courses) { %>
   <div class="col-12">
     <div class="card mb-3 shadow-sm">
       <div class="card-body pb-2">
-        <h5 class="card-title mb-2"><%= course.name %> (<%= course.code %>)</h5>
+        <h5 class="card-title mb-2"><%= course.code %> - <%= course.name %></h5>
 
         <div class="text-muted" style="font-size: 0.95rem">
           <p class="mb-0"><i class="bi bi-person-video3 me-1"></i><strong>Dosen:</strong> <%= course.lecturer.name %></p>
           <p class="mb-0"><i class="bi bi-people-fill me-1"></i><strong>Kelas:</strong> <%= course.class %></p>
           <p class="mb-0"><i class="bi bi-calendar3 me-1"></i><strong>Semester:</strong> <%= course.semester %></p>
+          <p class="mb-0"><i class="bi bi-calendar3 me-1"></i><strong>Tahun Ajaran:</strong> <%= course.academicYear %></p>
         </div>
 
         <% if (course.description) { %>
@@ -36,7 +47,7 @@
           <button disabled class="btn btn-sm btn-secondary">Sudah Terdaftar</button>
           <% } else { %>
           <form action="/courses/<%= course._id %>/enroll" method="POST" class="m-0">
-            <button class="btn btn-sm btn-primary">Enroll</button>
+            <button class="btn btn-sm btn-primary">Enroll Kelas</button>
           </form>
           <% } %> <% } %>
         </div>

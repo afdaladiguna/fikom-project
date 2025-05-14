@@ -17,15 +17,32 @@ mongoose
   .catch((err) => console.log(err));
 
 const seedDB = async () => {
-  for (let i = 4; i < 16; i++) {
+  // Hapus semua isi koleksi
+  await User.deleteMany({});
+  await Course.deleteMany({});
+  await Assignment.deleteMany({});
+  await Project.deleteMany({});
+  await Review.deleteMany({});
+
+  // Tambah mahasiswa dengan NIM dari 13020210009 sampai 13020210015
+  for (let i = 1; i <= 20; i++) {
+    const nim = `130202100${String(i).padStart(2, "0")}`;
     const student = new User({
       name: faker.person.fullName(),
-      username: `1302021000${i}`,
-      actualId: `1302021000${i}`,
+      username: nim,
+      actualId: nim,
       role: "mahasiswa",
     });
-    await User.register(student, "password");
+    await User.register(student, nim);
   }
+
+  const admin = new User({
+    name: "Master Administrator",
+    username: "admin",
+    actualId: "admin",
+    role: "admin",
+  });
+  await User.register(admin, "admin");
 
   console.log("Seeding complete");
   mongoose.connection.close();

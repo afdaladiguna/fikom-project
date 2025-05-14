@@ -23,6 +23,7 @@ const projectRoutes = require("./routes/projects");
 const reviewRoutes = require("./routes/reviews");
 const courseRoutes = require("./routes/courses");
 const assignmentRoutes = require("./routes/assignments");
+const adminRoutes = require("./routes/admin");
 
 const dbUrl = process.env.DB_URL;
 
@@ -118,6 +119,7 @@ app.use("/projects", projectRoutes);
 app.use("/projects/:id/reviews", reviewRoutes);
 app.use("/courses", courseRoutes);
 app.use("/courses/:id/assignments", assignmentRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");

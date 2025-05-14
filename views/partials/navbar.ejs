@@ -10,9 +10,10 @@
       <div class="navbar-nav me-auto">
         <a class="nav-link" href="/">Home</a>
         <a class="nav-link" href="/projects">Proyek Mahasiswa</a>
-        <a class="nav-link" href="/courses">Mata Kuliah</a>
 
-        <% if (currentUser) { %> <% if (currentUser.role === 'mahasiswa') { %>
+        <% if (currentUser) { %>
+        <a class="nav-link" href="/courses">Mata Kuliah</a>
+        <% }%> <% if (currentUser) { %> <% if (currentUser.role === 'mahasiswa') { %>
         <a class="nav-link" href="/projects/my-projects">Proyek Saya</a>
         <a class="nav-link" href="/courses/my-courses">Mata Kuliah Saya</a>
         <% } else if (currentUser.role === 'dosen') { %>

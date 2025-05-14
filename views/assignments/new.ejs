@@ -44,21 +44,20 @@ Rubrik penilaian:
         <label class="form-label" for="category">Kategori Tugas</label>
         <select class="form-select" id="category" name="assignment[category]" required>
           <option disabled selected value="">Pilih Kategori</option>
+          <option value="Tugas">Tugas</option>
           <option value="Mid">Mid</option>
           <option value="Final">Final</option>
-          <option value="Assignment">Assignment</option>
-          <option value="Quiz">Quiz</option>
         </select>
       </div>
 
       <div class="mb-3">
         <label class="form-label d-block">Jenis Tugas</label>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="assignment[type]" id="individual" value="Individual" required />
-          <label class="form-check-label" for="individual">Individu</label>
+          <input class="form-check-input" type="radio" name="assignment[type]" id="individu" value="Individu" required />
+          <label class="form-check-label" for="individu">Individu</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="assignment[type]" id="group" value="Group" required />
+          <input class="form-check-input" type="radio" name="assignment[type]" id="group" value="Kelompok" required />
           <label class="form-check-label" for="group">Kelompok</label>
         </div>
       </div>

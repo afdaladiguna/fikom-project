@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate.ejs') %>
 <link rel="stylesheet" href="/stylesheets/stars.css" />
+<a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary mb-4 px-3 py-2"> &larr; Back </a>
 
 <div class="row">
   <div class="col-8">
@@ -26,26 +27,25 @@
     <div class="card mb-3">
       <div class="card-body">
         <h5 class="card-title"><%= project.title %></h5>
-        <% if (project.assignment) { %>
-        <small class="text-muted">
-          Dikumpulkan untuk tugas
-          <a href="/courses/<%= project.assignment.course._id %>/assignments/<%= project.assignment._id %>"> <%= project.assignment.title %> </a>
-          <% if (project.assignment.course) { %> dari mata kuliah
-          <a href="/courses/<%= project.assignment.course._id %>"> <%= project.assignment.course.name %> </a>
-          <% } %>
-        </small>
-        <% } %>
-
-        <p class="mb-2"><span class="badge bg-info"> <%= project.category %> </span></p>
+        <p class="mb-4"><small class="text-muted">Keyword: </small> <span class="badge bg-info"> <%= project.category %> </span></p>
         <p class="card-text"><%= project.description %></p>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          <%= project.author.name %> / <%= project.author.nim %><br />
-          <%= project.author.faculty %><br />
-          <%= project.author.department %> <%= project.author.batch %>
+          Author: <%= project.author.name %> / <%= project.author.actualId %><br />
+          <% if (project.assignment) { %>
+          <small class="text-muted">
+            Dikumpulkan untuk tugas
+            <a href="/projects?keyword=&subjectName=<%= project.assignment.course.name %>"> <%= project.assignment.course.name %> </a>
+          </small>
+          <small class="text-muted">
+            Dikumpulkan untuk tugas
+            <p>Tugas <%=project.assignment.type %></p>
+          </small>
+          <% } %>
         </li>
       </ul>
+
       <% if( currentUser && project.author.equals(currentUser._id)) { %>
       <div class="card-body">
         <a class="card-link btn btn-info" href="/projects/<%= project._id %>/edit">Edit</a>
@@ -54,10 +54,11 @@
         </form>
       </div>
       <% } %>
-      <div class="card-footer text-secondary text-center">Submitted by <%= project.author.username %></div>
+      <div class="card-footer text-secondary text-center">Submitted at <%= project.createdAt ? project.createdAt.toLocaleDateString() : "" %></div>
     </div>
   </div>
   <div class="col-3">
+    <p class="fs-3">Komentar :</p>
     <% if(currentUser) { %>
     <h2>Leave a Review</h2>
     <form action="/projects/<%=project._id%>/reviews" method="POST" class="mb-3 needs-validation" novalidate>

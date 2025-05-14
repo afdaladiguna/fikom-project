@@ -20,7 +20,15 @@ router.route("/").post(
 router.get("/new", isLecturer, assignments.renderNewForm);
 
 // Detail tugas, update, hapus
-router.route("/:assignmentId").get(isLoggedIn, catchAsync(assignments.showAssignment)).put(isLecturer, catchAsync(assignments.updateAssignment)).delete(isLecturer, catchAsync(assignments.deleteAssignment));
+router
+  .route("/:assignmentId")
+  .get(isLoggedIn, catchAsync(assignments.showAssignment))
+  .put(
+    isLecturer,
+    upload.single("pdfFile"), // Tambahkan middleware multer di sini
+    catchAsync(assignments.updateAssignment)
+  )
+  .delete(isLecturer, catchAsync(assignments.deleteAssignment));
 
 // Form edit tugas
 router.get("/:assignmentId/edit", isLecturer, catchAsync(assignments.renderEditForm));

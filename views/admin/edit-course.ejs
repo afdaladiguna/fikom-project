@@ -1,27 +1,119 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container my-4">
-  <h2>Edit Mata Kuliah</h2>
-  <form action="/admin/course/<%= course._id %>?_method=PUT" method="POST">
-    <div class="mb-3">
-      <label for="name" class="form-label">Nama Mata Kuliah</label>
-      <input type="text" name="course[name]" class="form-control" id="name" value="<%= course.name %>" required />
-    </div>
-    <div class="mb-3">
-      <label for="description" class="form-label">Deskripsi</label>
-      <textarea name="course[description]" class="form-control" id="description" rows="3"><%= course.description %></textarea>
-    </div>
-    <div class="mb-3">
-      <label class="form-label" for="lecturer">Dosen Pengampu</label>
-      <select class="form-select" id="lecturer" name="course[lecturer]" required>
-        <option disabled selected value="">Pilih Dosen</option>
-        <% lecturers.forEach(d => { %>
-        <option value="<%= d._id %>"><%= d.name %></option>
-        <% }) %>
-      </select>
-    </div>
+<div class="row">
+  <h1 class="text-center">Edit Mata Kuliah (Admin)</h1>
+  <div class="col-md-6 offset-md-3">
+    <form action="/admin/courses/<%= course._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="code">Kode Mata Kuliah</label>
+        <input class="form-control" hidden type="text" id="codeHidden" name="course[code]" value="<%= course.code %>" readonly required />
+        <input class="form-control" type="text" id="code" value="<%= course.code %>" readonly required disabled />
+      </div>
 
-    <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="/admin/courses" class="btn btn-secondary">Kembali</a>
-  </form>
+      <div class="mb-3">
+        <label class="form-label" for="name">Nama Mata Kuliah</label>
+        <select class="form-select" id="name" name="course[name]" required>
+          <option disabled value="">Pilih Mata Kuliah</option>
+          <% subjects.forEach(subject => { %>
+          <option value="<%= subject.name %>" <%= course.name === subject.name ? 'selected' : '' %>><%= subject.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="class">Kelas</label>
+        <select class="form-select" id="class" name="course[class]" required>
+          <option disabled value="">Pilih Kelas</option>
+          <% ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'].forEach(c => { %>
+          <option value="<%= c %>" <%= course.class === c ? 'selected' : '' %>><%= c %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="semester">Semester</label>
+        <select class="form-select" id="semester" name="course[semester]" required>
+          <option disabled value="">Pilih Semester</option>
+          <% for (let i = 1; i <= 8; i++) { %>
+          <option value="<%= i %>" <%= course.semester == i ? 'selected' : '' %>><%= i %></option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="academicYear">Tahun Ajaran</label>
+        <select class="form-select" id="academicYear" name="course[academicYear]" required>
+          <option disabled value="">Pilih Tahun Ajaran</option>
+          <% ['2022/2023', '2023/2024', '2024/2025', '2025/2026', '2026/2027'].forEach(y => { %>
+          <option value="<%= y %>" <%= course.academicYear === y ? 'selected' : '' %>><%= y %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="lecturer">Dosen Pengampu</label>
+        <select class="form-select" id="lecturer" name="course[lecturer]" required>
+          <option disabled value="">Pilih Dosen</option>
+          <% lecturers.forEach(lect => { %>
+          <option value="<%= lect._id %>" <%= course.lecturer == lect._id ? 'selected' : '' %>>
+            <%= lect.name %> - <%= lect.nip %>
+          </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="description">Deskripsi</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="course[description]"
+          rows="4"
+          required
+        ><%= course.description %></textarea>
+      </div>
+
+      <div class="mb-3 py-2">
+        <button class="btn btn-primary me-2">Simpan Perubahan</button>
+        <a href="/admin/courses" class="btn btn-secondary">Kembali</a>
+      </div>
+    </form>
+  </div>
 </div>
+
+<script>
+  const nameInput = document.getElementById("name");
+  const classInput = document.getElementById("class");
+  const semesterInput = document.getElementById("semester");
+  const yearInput = document.getElementById("academicYear");
+  const codeInput = document.getElementById("code");
+  const hiddenCodeInput = document.getElementById("codeHidden");
+
+  function generateCode() {
+    const name = nameInput.value.trim();
+    const classVal = classInput.value;
+    const semester = semesterInput.value;
+    const year = yearInput.value;
+
+    if (!name || !classVal || !semester || !year) {
+      codeInput.value = "";
+      return;
+    }
+
+    const yearShort = year.split("/")[0].slice(2) + year.split("/")[1].slice(2);
+    const nameShort = name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+
+    const code = `${yearShort}-${nameShort}-${classVal}-${semester}`;
+    codeInput.value = code;
+    hiddenCodeInput.value = code;
+  }
+
+  [nameInput, classInput, semesterInput, yearInput].forEach((input) => {
+    input.addEventListener("input", generateCode);
+    input.addEventListener("change", generateCode);
+  });
+</script>

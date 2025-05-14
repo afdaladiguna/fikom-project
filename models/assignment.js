@@ -16,12 +16,12 @@ const AssignmentSchema = new Schema({
   dueDate: { type: Date, required: true },
   type: {
     type: String,
-    enum: ["Individual", "Group"],
+    enum: ["Individu", "Kelompok"],
     required: true,
   },
   category: {
     type: String,
-    enum: ["Mid", "Final", "Assignment"],
+    enum: ["Mid", "Final", "Tugas"],
     required: true,
   },
   course: {

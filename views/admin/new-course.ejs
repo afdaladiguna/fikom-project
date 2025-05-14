@@ -52,7 +52,7 @@
 
       <div class="mb-3">
         <label class="form-label" for="lecturer">Dosen Pengampu</label>
-        <select class="form-select" id="lecturer" name="course[lecturerId]" required>
+        <select class="form-select" id="lecturer" name="course[lecturer]" required>
           <option disabled selected value="">Pilih Dosen</option>
           <% lecturers.forEach(lect => { %>
           <option value="<%= lect._id %>"><%= lect.name %> - <%= lect.nip %></option>

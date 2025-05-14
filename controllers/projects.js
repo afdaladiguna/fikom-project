@@ -2,28 +2,53 @@
 /* eslint-disable prefer-const */
 const Project = require("../models/project");
 const Course = require("../models/course");
+const Subject = require("../models/subject");
 const Assignment = require("../models/assignment");
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
-  const { keyword, courseId } = req.query;
+  const { keyword, subjectName } = req.query;
 
   let query = {};
 
+  // Filter berdasarkan keyword (judul/deskripsi/kategori)
   if (keyword) {
     query.$or = [{ title: { $regex: keyword, $options: "i" } }, { description: { $regex: keyword, $options: "i" } }, { category: { $regex: keyword, $options: "i" } }];
   }
 
-  let projects = await Project.find(query).populate("assignment");
-  const courses = await Course.find({});
+  // Ambil semua project + populate assignment → course + author
+  let projects = await Project.find(query)
+    .populate({
+      path: "assignment",
+      populate: {
+        path: "course",
+        strictPopulate: false,
+      },
+      strictPopulate: false,
+    })
+    .populate("author");
 
-  if (courseId) {
-    projects = projects.filter((project) => {
-      return project.assignment && project.assignment.course.toString() === courseId;
-    });
+  // Filter berdasarkan nama mata kuliah (course.name)
+  if (subjectName) {
+    const regex = new RegExp(subjectName, "i");
+    projects = projects.filter((project) => project.assignment?.course?.name?.match(regex));
   }
 
-  res.render("projects/index", { projects, keyword, courseId, courses });
+  // Ambil semua mata kuliah dari Course (tanpa duplikat berdasarkan nama)
+  const allCourses = await Course.find().select("name").lean();
+  const seenNames = new Set();
+  const subjects = allCourses.filter((course) => {
+    if (seenNames.has(course.name)) return false;
+    seenNames.add(course.name);
+    return true;
+  });
+
+  res.render("projects/index", {
+    projects,
+    keyword,
+    subjectName,
+    subjects,
+  });
 };
 
 module.exports.myProjects = async (req, res) => {

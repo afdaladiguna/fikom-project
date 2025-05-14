@@ -2,8 +2,23 @@ const Course = require("../models/course");
 const Subject = require("../models/subject");
 
 module.exports.index = async (req, res) => {
-  const courses = await Course.find().populate("lecturer");
-  res.render("courses/index", { courses });
+  const { keyword } = req.query;
+  const regex = keyword ? new RegExp(keyword, "i") : null;
+
+  // Ambil semua course + dosennya
+  let courses = await Course.find().populate("lecturer");
+
+  // Jika ada keyword, lakukan filter manual
+  if (regex) {
+    courses = courses.filter((course) => {
+      return regex.test(course.name) || regex.test(course.code) || regex.test(course.class) || regex.test(course.description) || regex.test(course.lecturer?.name || "");
+    });
+  }
+
+  res.render("courses/index", {
+    courses,
+    keyword,
+  });
 };
 
 module.exports.myCourses = async (req, res) => {

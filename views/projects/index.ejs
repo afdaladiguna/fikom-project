@@ -1,24 +1,26 @@
 <% layout('layouts/boilerplate.ejs') %>
-<h1 class="fs-2 pb-3">Semua Proyek Mahasiswa</h1>
+<h1 class="fs-2 pb-3">📚Semua Proyek Mahasiswa</h1>
 
 <form method="GET" action="/projects" class="mb-4">
   <div class="row g-2 align-items-end">
     <div class="col-md-4">
-      <label class="form-label">Keyword</label>
+      <label class="form-label">Search</label>
       <input type="text" class="form-control" name="keyword" value="<%= typeof keyword !== 'undefined' ? keyword : '' %>" placeholder="Cari judul, deskripsi, kategori..." />
     </div>
 
-    <div class="col-md-4">
-      <label class="form-label">Mata Kuliah</label>
-      <select name="courseId" class="form-select">
-        <option value="">-- Semua --</option>
-        <% for(let course of courses) { %>
-          <option value="<%= course._id %>" <%= course._id.toString() === courseId ? 'selected' : '' %>>
-            <%= course.name %>
-          </option>
-        <% } %>
-      </select>
-    </div>
+  <div class="col-md-4">
+  <label class="form-label">Mata Kuliah</label>
+  <select name="subjectName" class="form-select">
+    <option value="">-- Semua --</option>
+    <% for (let subject of subjects) { %>
+      <option value="<%= subject.name %>" <%= subject.name === subjectName ? 'selected' : '' %>>
+        <%= subject.name %>
+      </option>
+    <% } %>
+  </select>
+</div>
+
+
 
     <div class="col-md-2">
       <button type="submit" class="btn btn-primary">Filter</button>
@@ -31,7 +33,7 @@
   <% for(let project of projects) { %>
 
   <div class="col-lg-3">
-    <div class="card mb-4" style="width: 19.5rem; height: 23rem">
+    <div class="card mb-4" style="width: 19.5rem; height: 26rem">
       <!-- <img src="..." class="card-img-top" alt="..."> -->
       <% if(project.images.length) { %>
 
@@ -39,10 +41,14 @@
       <% } else { %>
       <img crossorigin="anonymous" class="img-fluid bg-secondary py-4 my-2" alt="" src="https://res.cloudinary.com/depkm8h6l/image/upload/f_auto,q_auto/v1/fikom-project/logo-fikom" />
       <% } %>
-      <div class="card-body pt-2">
+<div class="card-body pt-2" style="overflow: hidden">
         <p class="mb-2"><span class="badge bg-info"> <%= project.category %> </span></p>
-        <h5 class="card-title mt-1"><%= truncateDescription(project.title, 10) %></h5>
-        <p class="card-text"><%= truncateDescription(project.description, 70) %></p>
+        <h5 class="card-title mt-1"><%= truncateDescription(project.title, 30) %></h5>
+        <p class="card-text"><%= truncateDescription(project.description, 60) %></p>
+        <p class="mb-1 text-muted" style="font-size: 0.875rem">
+  Oleh: <%= project.author.name %> / <%= project.author.actualId %>
+</p>
+
       </div>
       <div class="card-footer py-3">
         <a href="/projects/<%= project._id %>" class="btn btn-sm btn-warning">Lihat <%= truncateDescription(project.title, 10) %> </a>

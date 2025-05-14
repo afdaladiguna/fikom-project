@@ -1,19 +1,19 @@
 <% layout('layouts/boilerplate.ejs') %>
+<a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary mb-1 ms-2 px-3 py-2"> &larr; Back </a>
 
 <div class="container py-4">
   <div class="card shadow-sm mb-4">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-start">
         <div>
-          <h4 class="mb-1"><%= course.name %></h4>
+          <h4 class="mb-1"><%= course.code %> - <%= course.name %></h4>
           <div class="mb-2">
-            <span class="badge bg-light text-dark border me-1"><%= course.code %></span>
             <span class="badge bg-light text-dark border me-1">Kelas <%= course.class %></span>
             <span class="badge bg-light text-dark border me-1">Semester <%= course.semester %></span>
             <span class="badge bg-light text-dark border">TA <%= course.academicYear %></span>
           </div>
           <% if (course.lecturer && course.lecturer.name) { %>
-          <p class="mb-0 text-muted small"><i class="bi bi-person-badge"></i> Dosen Pengampu: <strong><%= course.lecturer.name %></strong></p>
+          <p class="mt-3 mb-0 text-muted small"><i class="bi bi-person-badge"></i> Dosen Pengampu: <strong><%= course.lecturer.name %></strong></p>
           <% } %>
         </div>
 
@@ -46,8 +46,15 @@
     <span class="fw-bold"><%= course.students.length %> Mahasiswa</span>
   </div>
 
+  <% if (currentUser.role === 'mahasiswa') { %> <% if (!course.students.some(s => s.equals(currentUser._id))) { %>
+  <div class="alert alert-warning d-flex align-items-center mt-3" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>Anda harus <strong>enroll terlebih dahulu</strong> untuk melihat tugas dan mengakses materi mata kuliah ini.</div>
+  </div>
+  <% } %> <% } %>
+
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="mb-0">Daftar Tugas</h5>
+    <h5 class="mb-0 mt-4">Daftar Tugas</h5>
     <% if (currentUser.role === 'dosen' && currentUser._id.toString() === course.lecturer._id.toString()) { %>
     <a href="/courses/<%= course._id %>/assignments/new" class="btn btn-sm btn-primary">+ Tambah Tugas</a>
     <% } %>
@@ -90,10 +97,11 @@
           </div>
 
           <% if (assignment.description) { %>
-          <p class="text-muted small mt-2 mb-1"><%= assignment.description %></p>
-          <% } %>
+          <p class="text-muted small mt-3 mb-3"><%= assignment.description %></p>
+          <% } %> <% if (currentUser.role !== 'mahasiswa' || course.students.some(s => s.equals(currentUser._id))) { %>
 
           <a href="/courses/<%= course._id %>/assignments/<%= assignment._id %>" class="btn btn-sm btn-outline-primary">Lihat Detail</a>
+          <% } %>
         </div>
       </div>
     </div>
