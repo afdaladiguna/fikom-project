@@ -1,0 +1,39 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="mb-4">Daftar User</h1>
+
+<a href="/admin/users/new" class="btn btn-primary mb-3">+ Tambah User</a>
+
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>No.</th>
+      <th>NIM/NIDN</th>
+      <th>Nama Lengkap</th>
+      <th>Role</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% let num = 0 %> <% users.forEach(user => { %>
+    <tr>
+      <td><%= num += 1 %></td>
+      <td><%= user.username %></td>
+      <td><%= user.name %></td>
+      <td><%= user.role %></td>
+      <td>
+        <% if (user._id.toString() !== currentUser._id.toString()) { %>
+        <form method="POST" action="/admin/users/<%= user._id %>/reset" style="display: inline">
+          <button class="btn btn-warning btn-sm">Reset Password</button>
+        </form>
+        <form method="POST" action="/admin/users/<%= user._id %>?_method=DELETE" style="display: inline">
+          <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin?')">Hapus</button>
+        </form>
+        <% } else { %>
+        <!-- <span class="text-muted">Aksi tidak tersedia</span> -->
+        <% } %>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>

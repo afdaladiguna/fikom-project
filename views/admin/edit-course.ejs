@@ -11,7 +11,17 @@
       <label for="description" class="form-label">Deskripsi</label>
       <textarea name="course[description]" class="form-control" id="description" rows="3"><%= course.description %></textarea>
     </div>
+    <div class="mb-3">
+      <label class="form-label" for="lecturer">Dosen Pengampu</label>
+      <select class="form-select" id="lecturer" name="course[lecturer]" required>
+        <option disabled selected value="">Pilih Dosen</option>
+        <% lecturers.forEach(d => { %>
+        <option value="<%= d._id %>"><%= d.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="/admin/course" class="btn btn-secondary">Kembali</a>
+    <a href="/admin/courses" class="btn btn-secondary">Kembali</a>
   </form>
 </div>

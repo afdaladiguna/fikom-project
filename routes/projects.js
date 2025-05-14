@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { isLoggedIn, validateProject, isAuthor } = require("../middleware");
+const { isLoggedIn, isAuthor } = require("../middleware");
 const projects = require("../controllers/projects");
 const catchAsync = require("../utils/catchAsync");
 const multer = require("multer");

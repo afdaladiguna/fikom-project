@@ -1,0 +1,42 @@
+<% layout('layouts/boilerplate') %>
+<div class="container d-flex justify-content-center align-items-center mt-3">
+  <div class="row justify-content-center" style="width: 50em">
+    <div class="mb-5">
+      <div class="card shadow">
+        <div class="card-body">
+          <h5 class="card-title text-center border-bottom py-3 mb-4">Tambah User Baru</h5>
+          <form action="/admin/users" method="POST" class="validated-form needs-validation" novalidate>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="username"><b>NIM/NIDN</b></label>
+                  <input class="form-control" type="text" id="username" name="username" autofocus required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="password">Password</label>
+                  <input class="form-control" type="password" id="password" name="password" required />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label" for="name">Nama Lengkap</label>
+                  <input class="form-control" type="text" id="name" name="name" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="role">Role</label>
+                  <select class="form-select" id="role" name="role" required>
+                    <option value="mahasiswa">Mahasiswa</option>
+                    <option value="dosen">Dosen</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-success btn-block w-100">Tambah User</button>
+          </form>
+          <a href="/admin/users" class="btn btn-link mt-3 d-block text-center">Kembali ke Daftar User</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<% layout('layouts/boilerplate') %>
+
+<h1>Edit Subject</h1>
+<form action="/admin/subjects/<%= subject._id %>?_method=PUT" method="POST">
+  <div class="mb-3">
+    <label>Kode Subject</label>
+    <input type="text" name="subject[code]" class="form-control" value="<%= subject.code %>" required />
+  </div>
+  <div class="mb-3">
+    <label>Nama Subject</label>
+    <input type="text" name="subject[name]" class="form-control" value="<%= subject.name %>" required />
+  </div>
+  <button class="btn btn-primary">Update</button>
+</form>

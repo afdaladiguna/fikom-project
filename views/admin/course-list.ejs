@@ -1,21 +1,32 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container my-4">
-  <h2>📚 Daftar Mata Kuliah</h2>
+  <h2>🏫 Daftar Kelas Dosen</h2>
+
+  <a href="/admin/courses/new" class="btn btn-primary mb-3">+ Tambah Kelas</a>
 
   <table class="table table-bordered mt-3">
-    <thead>
+    <thead class="table-dark">
       <tr>
-        <th>Nama Mata Kuliah</th>
-        <th>Deskripsi</th>
+        <th>Nama Kelas</th>
+        <th>Kode</th>
+        <th>Semester</th>
+        <th>Tahun Akademik</th>
+        <th>Dosen Pengampu</th>
+        <th>Mahasiswa Terdaftar</th>
         <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
       <% courses.forEach(course => { %>
       <tr>
-        <td><%= course.name %></td>
-        <td><%= course.description %></td>
+        <td><%= course.name %> (<%= course.class %>)</td>
+        <td><%= course.code %></td>
+        <td><%= course.semester %></td>
+        <td><%= course.academicYear %></td>
+        <td><%= course.lecturer?.name || '-' %></td>
+        <td><%= course.students.length %> Mahasiswa</td>
+
         <td>
           <a href="/admin/courses/<%= course._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
           <form action="/admin/courses/<%= course._id %>?_method=DELETE" method="POST" class="d-inline">

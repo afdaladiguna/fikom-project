@@ -1,35 +1,45 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container my-4">
-  <h1>Dashboard Admin</h1>
+<div class="container my-5">
+  <h1 class="mb-4">📊 Dashboard Admin</h1>
 
-  <div class="row text-center my-4">
-    <div class="col">
+  <div class="row g-4 text-center">
+    <div class="col-md-3">
+      <a href="/admin/users" class="text-decoration-none text-dark">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5><i class="bi bi-people-fill"></i> Manajemen User</h5>
+            <p class="fs-4 fw-bold"><%= totalUsers %> User</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-3">
       <a href="/admin/courses" class="text-decoration-none text-dark">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm h-100">
           <div class="card-body">
-            <h5>Mata Kuliah</h5>
-            <p><%= totalCourses %></p>
+            <h5><i class="bi bi-journals"></i> Kelas</h5>
+            <p class="fs-4 fw-bold"><%= totalCourses %> Kelas</p>
           </div>
         </div>
       </a>
     </div>
-    <div class="col">
-      <a href="/students" class="text-decoration-none text-dark">
-        <div class="card shadow-sm">
+    <div class="col-md-3">
+      <a href="/admin/subjects" class="text-decoration-none text-dark">
+        <div class="card shadow-sm h-100">
           <div class="card-body">
-            <h5>Mahasiswa Terdaftar</h5>
-            <p><%= totalStudents %></p>
+            <h5><i class="bi bi-book-fill"></i> Mata Kuliah</h5>
+            <p class="fs-4 fw-bold"><%= totalSubjects %> Mata Kuliah</p>
           </div>
         </div>
       </a>
     </div>
-    <div class="col">
-      <a href="/assignments" class="text-decoration-none text-dark">
-        <div class="card shadow-sm">
+    <div class="col-md-3">
+      <a href="/admin/projects" class="text-decoration-none text-dark">
+        <div class="card shadow-sm h-100">
           <div class="card-body">
-            <h5>Project Mahasiswa</h5>
-            <p><%= totalAssignments %></p>
+            <h5><i class="bi bi-folder-fill"></i> Project Mahasiswa</h5>
+            <p class="fs-4 fw-bold"><%= totalProjects %> Project</p>
           </div>
         </div>
       </a>
@@ -37,36 +47,31 @@
   </div>
 
   <div class="my-5">
-    <h3 class="mb-3">📌 Tugas Mendekati Deadline</h3>
-    <% if (upcomingAssignments.length > 0) { %>
-    <ul>
-      <% upcomingAssignments.forEach(a => { %>
-      <li><a href="/assignments/<%= a._id %>"><%= a.title %></a> - <%= a.dueDate.toDateString() %></li>
-      <% }) %>
-    </ul>
-    <% } else { %>
-    <p>Tidak ada tugas mendekati deadline.</p>
-    <% } %>
-  </div>
-
-  <div class="my-5">
-    <h3 class="mb-3">📝 Pengumpulan Terbaru</h3>
+    <h4 class="mb-3">📌 Tugas Terbaru</h4>
     <% if (recentProjects.length > 0) { %>
-    <ul>
+    <ul class="list-group">
       <% recentProjects.forEach(p => { %>
-      <li>
-        <strong><%= p.author?.name || 'Unknown' %></strong> -
-        <a href="/projects/<%= p._id %>"><%= p.title %></a>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong><%= p.author?.name || 'Unknown' %></strong> -
+          <a href="/projects/<%= p._id %>"><%= p.title %></a>
+        </div>
+        <span class="badge bg-secondary"><%= p.submittedAt?.toDateString() %></span>
       </li>
       <% }) %>
     </ul>
     <% } else { %>
-    <p>Belum ada pengumpulan terbaru.</p>
+    <p>Tidak ada project terbaru.</p>
     <% } %>
   </div>
 
   <div class="my-5">
-    <h4>🔧 Aksi Cepat</h4>
-    <a href="/register" class="btn btn-warning btn-sm">+ Tambah User</a>
+    <h4>⚡ Aksi Cepat</h4>
+    <div class="d-flex flex-wrap gap-2">
+      <a href="/admin/users/new" class="btn btn-primary btn-sm"><i class="bi bi-person-plus-fill"></i> Tambah User</a>
+      <a href="/admin/courses/new" class="btn btn-success btn-sm"><i class="bi bi-plus-circle-fill"></i> Tambah Kelas</a>
+      <a href="/admin/subjects/new" class="btn btn-info btn-sm"><i class="bi bi-plus-circle-fill"></i> Tambah Mata Kuliah</a>
+      <a href="/admin/projects/new" class="btn btn-warning btn-sm"><i class="bi bi-folder-plus"></i> Tambah Project</a>
+    </div>
   </div>
 </div>

@@ -1,0 +1,118 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="row">
+  <h1 class="text-center">Tambah Mata Kuliah (Admin)</h1>
+  <div class="col-md-6 offset-md-3">
+    <form action="/admin/courses" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="code">Kode Mata Kuliah</label>
+        <input class="form-control" hidden type="text" id="codeHidden" name="course[code]" readonly required />
+        <input class="form-control" type="text" id="code" name="" readonly required disabled />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="name">Nama Mata Kuliah</label>
+        <select class="form-select" id="name" name="course[name]" required>
+          <option disabled selected value="">Pilih Mata Kuliah</option>
+          <% subjects.forEach(subject => { %>
+          <option value="<%= subject.name %>"><%= subject.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="class">Kelas</label>
+        <select class="form-select" id="class" name="course[class]" required>
+          <option disabled selected value="">Pilih Kelas</option>
+          <% ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'].forEach(c => { %>
+          <option value="<%= c %>"><%= c %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="semester">Semester</label>
+        <select class="form-select" id="semester" name="course[semester]" required>
+          <option disabled selected value="">Pilih Semester</option>
+          <% for (let i = 1; i <= 8; i++) { %>
+          <option value="<%= i %>"><%= i %></option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="academicYear">Tahun Ajaran</label>
+        <select class="form-select" id="academicYear" name="course[academicYear]" required>
+          <option disabled selected value="">Pilih Tahun Ajaran</option>
+          <% ['2022/2023', '2023/2024', '2024/2025', '2025/2026', '2026/2027'].forEach(y => { %>
+          <option value="<%= y %>"><%= y %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="lecturer">Dosen Pengampu</label>
+        <select class="form-select" id="lecturer" name="course[lecturerId]" required>
+          <option disabled selected value="">Pilih Dosen</option>
+          <% lecturers.forEach(lect => { %>
+          <option value="<%= lect._id %>"><%= lect.name %> - <%= lect.nip %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="description">Deskripsi</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="course[description]"
+          rows="4"
+          placeholder="Contoh: Mata kuliah ini membahas mengenai konsep-konsep fundamental system basis data dan manfaatnya, bagaimana mengembangkan basis data, mendesain basis data dan sebagainya."
+          required
+        ></textarea>
+      </div>
+
+      <div class="mb-3 py-2">
+        <button class="btn btn-success me-2">Simpan</button>
+        <a href="/admin/dashboard" class="btn btn-danger">Batal</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const nameInput = document.getElementById("name");
+  const classInput = document.getElementById("class");
+  const semesterInput = document.getElementById("semester");
+  const yearInput = document.getElementById("academicYear");
+  const codeInput = document.getElementById("code");
+  const hiddenCodeInput = document.getElementById("codeHidden");
+
+  function generateCode() {
+    const name = nameInput.value.trim();
+    const classVal = classInput.value;
+    const semester = semesterInput.value;
+    const year = yearInput.value;
+
+    if (!name || !classVal || !semester || !year) {
+      codeInput.value = "";
+      return;
+    }
+
+    const yearShort = year.split("/")[0].slice(2) + year.split("/")[1].slice(2);
+    const nameShort = name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+
+    const code = `${yearShort}-${nameShort}-${classVal}-${semester}`;
+    codeInput.value = code;
+    hiddenCodeInput.value = code;
+  }
+
+  [nameInput, classInput, semesterInput, yearInput].forEach((input) => {
+    input.addEventListener("input", generateCode);
+    input.addEventListener("change", generateCode);
+  });
+</script>

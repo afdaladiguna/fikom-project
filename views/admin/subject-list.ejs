@@ -1,0 +1,30 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="mb-4">Daftar Subject</h1>
+<a href="/admin/subjects/new" class="btn btn-primary mb-3">+ Tambah Subject</a>
+
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>No.</th>
+      <th>Kode</th>
+      <th>Nama Subject</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% let num = 0; subjects.forEach(subject => { %>
+    <tr>
+      <td><%= ++num %></td>
+      <td><%= subject.code %></td>
+      <td><%= subject.name %></td>
+      <td>
+        <a href="/admin/subjects/<%= subject._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+        <form action="/admin/subjects/<%= subject._id %>?_method=DELETE" method="POST" style="display: inline">
+          <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus subject ini?')">Hapus</button>
+        </form>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-const { projectSchema, reviewSchema } = require("./schemas");
 const ExpressError = require("./utils/ExpressError");
 const Project = require("./models/project");
 const Review = require("./models/review");
@@ -18,16 +16,6 @@ module.exports.storeReturnTo = (req, res, next) => {
     res.locals.returnTo = req.session.returnTo;
   }
   next();
-};
-
-module.exports.validateProject = (req, res, next) => {
-  const { error } = projectSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
 };
 
 module.exports.isLecturer = async (req, res, next) => {
@@ -63,14 +51,4 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     return res.redirect(`/projects/${id}`);
   }
   next();
-};
-
-module.exports.validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
 };
