@@ -1,6 +1,8 @@
-<% layout('layouts/boilerplate.ejs') %>
-<a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary mb-1 ms-2 px-3 py-2"> &larr; Back </a>
-
+<% layout('layouts/boilerplate.ejs') %> <% if(currentUser.role === 'dosen') { %>
+<a href="/dashboard" class="btn btn-sm btn-outline-secondary mb-1 ms-2 px-3 py-2"> &larr; Back </a>
+<% } else { %>
+<a href="/courses" class="btn btn-sm btn-outline-secondary mb-1 ms-2 px-3 py-2"> &larr; Back </a>
+<% } %>
 <div class="container py-4">
   <div class="card shadow-sm mb-4">
     <div class="card-body">

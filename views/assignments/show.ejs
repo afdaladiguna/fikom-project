@@ -71,9 +71,9 @@
         <tr>
           <th>Nama Mahasiswa</th>
           <th>File</th>
-          <th>Catatan</th>
           <th>Waktu Kumpul</th>
           <th>Nilai</th>
+          <th>Catatan</th>
           <th>Aksi</th>
         </tr>
       </thead>
@@ -82,15 +82,16 @@
         <tr>
           <td><%= project.author?.name ?? '-' %></td>
           <td>
+            <a href="/projects/<%= project._id %>" class="d-block" target="_blank">Lihat Detail</a>
             <% if (project.repository) { %>
             <a href="<%= project.repository %>" target="_blank">Repository</a>
             <% } else if (project.images && project.images.length > 0) { %>
             <a href="<%= project.images[0].url %>" target="_blank">File</a>
             <% } else { %> Tidak ada file <% } %>
           </td>
-          <td><%= project.note || '-' %></td>
-          <td><%= project.submittedAt ? project.submittedAt.toLocaleString() : '-' %></td>
+          <td><%= project.createdAt ? project.createdAt.toLocaleString() : '-' %></td>
           <td><%= project.score ?? '-' %></td>
+          <td><%= project.note || '-' %></td>
           <td>
             <form action="/projects/<%= project._id %>/score" method="POST" class="d-flex flex-column gap-2">
               <input type="hidden" name="courseId" value="<%= course._id %>" />
