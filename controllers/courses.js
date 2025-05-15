@@ -36,14 +36,14 @@ module.exports.createCourse = async (req, res) => {
   const course = new Course(req.body.course);
   course.lecturer = req.user._id;
   await course.save();
-  req.flash("success", "Mata kuliah berhasil dibuat!");
+  req.flash("success", "Kelas berhasil dibuat!");
   res.redirect("/dashboard");
 };
 
 module.exports.showCourse = async (req, res) => {
   const course = await Course.findById(req.params.id).populate("lecturer").populate("assignments"); // <--- ini penting!
   if (!course) {
-    req.flash("error", "Mata kuliah tidak ditemukan.");
+    req.flash("error", "Kelas tidak ditemukan.");
     return res.redirect("/courses");
   }
   res.render("courses/show", { course });
@@ -51,24 +51,25 @@ module.exports.showCourse = async (req, res) => {
 
 module.exports.renderEditForm = async (req, res) => {
   const course = await Course.findById(req.params.id);
+  const subjects = await Subject.find({});
   if (!course) {
-    req.flash("error", "Mata kuliah tidak ditemukan.");
+    req.flash("error", "Kelas tidak ditemukan.");
     return res.redirect("/courses");
   }
-  res.render("courses/edit", { course });
+  res.render("courses/edit", { course, subjects });
 };
 
 module.exports.updateCourse = async (req, res) => {
   const { id } = req.params;
   await Course.findByIdAndUpdate(id, { ...req.body.course });
-  req.flash("success", "Mata kuliah berhasil diperbarui.");
+  req.flash("success", "Kelas berhasil diperbarui.");
   res.redirect(`/courses/${id}`);
 };
 
 module.exports.deleteCourse = async (req, res) => {
   const { id } = req.params;
   await Course.findByIdAndDelete(id);
-  req.flash("success", "Mata kuliah berhasil dihapus.");
+  req.flash("success", "Kelas berhasil dihapus.");
   res.redirect("/courses");
 };
 
@@ -79,13 +80,13 @@ module.exports.enroll = async (req, res) => {
   // Cek apakah user sudah terdaftar
   const alreadyEnrolled = course.students.includes(req.user._id);
   if (alreadyEnrolled) {
-    req.flash("info", "Kamu sudah terdaftar di mata kuliah ini.");
+    req.flash("info", "Kamu sudah terdaftar di kelas ini.");
     return res.redirect("/courses");
   }
 
   // Enroll user
   course.students.push(req.user._id);
   await course.save();
-  req.flash("success", "Berhasil mendaftar ke mata kuliah.");
+  req.flash("success", "Berhasil enroll kelas.");
   res.redirect("/courses");
 };

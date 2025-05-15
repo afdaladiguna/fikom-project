@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate.ejs') %>
 
 <div class="row">
-  <h1 class="text-center">Tambah Tugas untuk Mata Kuliah <%= course.name %></h1>
+  <h1 class="text-center">Tambah Tugas untuk Kelas <%= course.name %></h1>
   <div class="col-md-6 offset-md-3">
     <form action="/courses/<%= course._id %>/assignments" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
       <div class="mb-3">

@@ -6,7 +6,7 @@ module.exports.renderNewForm = async (req, res) => {
   const { id } = req.params;
   const course = await Course.findById(id);
   if (!course) {
-    req.flash("error", "Mata kuliah tidak ditemukan.");
+    req.flash("error", "Kelas tidak ditemukan.");
     return res.redirect("/courses");
   }
   res.render("assignments/new", { course });
@@ -16,7 +16,7 @@ module.exports.createAssignment = async (req, res) => {
   const { id } = req.params;
   const course = await Course.findById(id);
   if (!course) {
-    req.flash("error", "Mata kuliah tidak ditemukan.");
+    req.flash("error", "Kelas tidak ditemukan.");
     return res.redirect("/courses");
   }
 

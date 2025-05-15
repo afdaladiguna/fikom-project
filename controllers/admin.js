@@ -43,7 +43,7 @@ module.exports.renderEditCourse = async (req, res) => {
   const lecturers = await User.find({ role: "dosen" });
 
   if (!course) {
-    req.flash("error", "Mata kuliah tidak ditemukan.");
+    req.flash("error", "Kelas tidak ditemukan.");
     return res.redirect("/admin/courses");
   }
   res.render("admin/edit-course", { course, lecturers, subjects });
@@ -53,14 +53,14 @@ module.exports.updateCourse = async (req, res) => {
   const { id } = req.params;
   const { name, description } = req.body.course;
   await Course.findByIdAndUpdate(id, { name, description });
-  req.flash("success", "Berhasil mengupdate mata kuliah.");
+  req.flash("success", "Berhasil mengupdate Kelas.");
   res.redirect("/admin/courses");
 };
 
 module.exports.deleteCourse = async (req, res) => {
   const { id } = req.params;
   await Course.findByIdAndDelete(id);
-  req.flash("success", "Berhasil menghapus mata kuliah.");
+  req.flash("success", "Berhasil menghapus kelas.");
   res.redirect("/admin/courses");
 };
 

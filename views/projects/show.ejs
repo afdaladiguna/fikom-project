@@ -35,12 +35,11 @@
           Author: <%= project.author.name %> / <%= project.author.actualId %><br />
           <% if (project.assignment) { %>
           <small class="text-muted">
-            Dikumpulkan untuk tugas
+            Dikumpulkan untuk tugas <% if (project.assignment.course) { %>
             <a href="/projects?keyword=&subjectName=<%= project.assignment.course.name %>"> <%= project.assignment.course.name %> </a>
-          </small>
-          <small class="text-muted">
-            Dikumpulkan untuk tugas
-            <p>Tugas <%=project.assignment.type %></p>
+            <% } else { %>
+            <!-- <span class="text-danger">[Mata kuliah dihapus]</span> -->
+            <% } %>
           </small>
           <% } %>
         </li>

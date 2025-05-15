@@ -8,18 +8,18 @@
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/projects">Proyek Mahasiswa</a>
+        <a class="nav-link me-2" href="/">Home</a>
+        <a class="nav-link me-2" href="/projects">Tugas Proyek Mahasiswa</a>
 
         <% if (currentUser) { %>
-        <a class="nav-link" href="/courses">Mata Kuliah</a>
+        <a class="nav-link me-2" href="/courses">Daftar Kelas</a>
         <% }%> <% if (currentUser) { %> <% if (currentUser.role === 'mahasiswa') { %>
-        <a class="nav-link" href="/projects/my-projects">Proyek Saya</a>
-        <a class="nav-link" href="/courses/my-courses">Mata Kuliah Saya</a>
+        <a class="nav-link me-2" href="/projects/my-projects">Tugas Proyek Saya</a>
+        <a class="nav-link me-2" href="/courses/my-courses">Kelas Saya</a>
         <% } else if (currentUser.role === 'dosen') { %>
-        <a class="nav-link" href="/dashboard">Dashboard Dosen</a>
+        <a class="nav-link me-2" href="/dashboard">Dashboard Dosen</a>
         <% } else if (currentUser.role === 'admin') { %>
-        <a class="nav-link" href="/admin/dashboard">Dashboard Admin</a>
+        <a class="nav-link me-2" href="/admin/dashboard">Dashboard Admin</a>
 
         <% } %> <% } %>
       </div>

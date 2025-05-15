@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container my-5">
+<div class="container">
   <h1 class="mb-4">📊 Dashboard Admin</h1>
 
   <div class="row g-4 text-center">
@@ -34,6 +34,7 @@
         </div>
       </a>
     </div>
+
     <div class="col-md-3">
       <a href="/admin/projects" class="text-decoration-none text-dark">
         <div class="card shadow-sm h-100">
@@ -43,6 +44,15 @@
           </div>
         </div>
       </a>
+    </div>
+  </div>
+
+  <div class="my-5">
+    <h4>⚡ Quick Action</h4>
+    <div class="d-flex flex-wrap gap-2">
+      <a href="/admin/users/new" class="btn btn-primary btn-sm"><i class="bi bi-person-plus-fill"></i> Tambah User</a>
+      <a href="/admin/courses/new" class="btn btn-success btn-sm"><i class="bi bi-plus-circle-fill"></i> Tambah Kelas</a>
+      <a href="/admin/subjects/new" class="btn btn-info btn-sm"><i class="bi bi-plus-circle-fill"></i> Tambah Mata Kuliah</a>
     </div>
   </div>
 
@@ -63,15 +73,5 @@
     <% } else { %>
     <p>Tidak ada project terbaru.</p>
     <% } %>
-  </div>
-
-  <div class="my-5">
-    <h4>⚡ Aksi Cepat</h4>
-    <div class="d-flex flex-wrap gap-2">
-      <a href="/admin/users/new" class="btn btn-primary btn-sm"><i class="bi bi-person-plus-fill"></i> Tambah User</a>
-      <a href="/admin/courses/new" class="btn btn-success btn-sm"><i class="bi bi-plus-circle-fill"></i> Tambah Kelas</a>
-      <a href="/admin/subjects/new" class="btn btn-info btn-sm"><i class="bi bi-plus-circle-fill"></i> Tambah Mata Kuliah</a>
-      <a href="/admin/projects/new" class="btn btn-warning btn-sm"><i class="bi bi-folder-plus"></i> Tambah Project</a>
-    </div>
   </div>
 </div>

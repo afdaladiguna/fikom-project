@@ -23,10 +23,10 @@
             <i class="bi bi-three-dots-vertical"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="/courses/<%= course._id %>/edit">Edit Mata Kuliah</a></li>
+            <li><a class="dropdown-item" href="/courses/<%= course._id %>/edit">Edit Kelas</a></li>
             <li>
-              <form action="/courses/<%= course._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Yakin ingin menghapus mata kuliah ini?')">
-                <button type="submit" class="dropdown-item text-danger">Hapus Mata Kuliah</button>
+              <form action="/courses/<%= course._id %>?_method=DELETE" method="POST" onsubmit="return confirm('Yakin ingin menghapus Kelas ini?')">
+                <button type="submit" class="dropdown-item text-danger">Hapus Kelas</button>
               </form>
             </li>
           </ul>
@@ -49,7 +49,7 @@
   <% if (currentUser.role === 'mahasiswa') { %> <% if (!course.students.some(s => s.equals(currentUser._id))) { %>
   <div class="alert alert-warning d-flex align-items-center mt-3" role="alert">
     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    <div>Anda harus <strong>enroll terlebih dahulu</strong> untuk melihat tugas dan mengakses materi mata kuliah ini.</div>
+    <div>Anda harus <strong>enroll terlebih dahulu</strong> untuk melihat tugas dan mengakses materi kelas ini.</div>
   </div>
   <% } %> <% } %>
 
@@ -110,7 +110,7 @@
   <% } else { %>
   <div class="text-center text-muted fst-italic mt-4">
     <i class="bi bi-inbox fs-4 d-block mb-2"></i>
-    Belum ada tugas yang terdaftar untuk mata kuliah ini.
+    Belum ada tugas yang terdaftar untuk kelas ini.
   </div>
   <% } %>
 </div>
