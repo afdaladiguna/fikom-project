@@ -7,6 +7,49 @@
       }
       return text;
   } %>
+
+  // Fungsi JavaScript untuk menangani enroll kelas
+  async function enrollCourse(courseId) {
+    const enrollKey = prompt("Masukkan enroll key kelas:");
+
+    if (enrollKey === null || enrollKey.trim() === "") {
+      alert("Enroll dibatalkan atau password tidak dimasukkan.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/courses/${courseId}/enroll`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ enrollKey: enrollKey }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(data.message);
+        window.location.reload();
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Terjadi kesalahan saat enroll kelas.");
+    }
+  }
+
+  // Dapatkan semua tombol enroll dan tambahkan event listener
+  document.addEventListener('DOMContentLoaded', () => { // Tambahkan event listener untuk DOMContentLoaded
+    const enrollButtons = document.querySelectorAll(".enroll-button");
+    enrollButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const courseId = this.dataset.courseId;
+        enrollCourse(courseId);
+      });
+    });
+  });
 </script>
 
 <h1 class="fs-2 pb-3">🧑‍🏫Daftar Kelas</h1>
@@ -46,10 +89,7 @@
           <% if (currentUser.role === "mahasiswa") { %> <% if (course.students.some(s => s.equals(currentUser._id))) { %>
           <button disabled class="btn btn-sm btn-secondary">Sudah Terdaftar</button>
           <% } else { %>
-          <form action="/courses/<%= course._id %>/enroll" method="POST" class="m-0">
-            <button class="btn btn-sm btn-primary">Enroll Kelas</button>
-          </form>
-          <% } %> <% } %>
+          <button type="button" class="btn btn-sm btn-primary enroll-button" data-course-id="<%= course._id %>">Enroll Kelas</button> <% } %> <% } %>
         </div>
       </div>
     </div>

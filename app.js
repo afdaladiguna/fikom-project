@@ -43,6 +43,7 @@ app.engine("ejs", ejsMate); // set ejs as engine for express app
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use(express.json()); // Ini untuk menguraikan JSON request body
 app.use(express.urlencoded({ extended: true })); // parse the req.body
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -89,6 +90,7 @@ app.use(
       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
       workerSrc: ["'self'", "blob:"],
       objectSrc: [],
+      connectSrc: ["'self'", "http://localhost:3000"],
       imgSrc: [
         "'self'",
         "blob:",

@@ -72,6 +72,12 @@
         ></textarea>
       </div>
 
+      <div class="mb-3">
+        <label class="form-label" for="enrollKey">Enrollment Key (Tanpa Spasi)</label>
+        <input class="form-control" type="text" id="enrollKey" name="course[enrollKey]" placeholder="Enroll key" required />
+        </select>
+      </div>
+
       <div class="mb-3 py-2">
         <button class="btn btn-success me-2">Simpan</button>
         <a href="/admin/dashboard" class="btn btn-danger">Batal</a>
@@ -115,4 +121,11 @@
     input.addEventListener("input", generateCode);
     input.addEventListener("change", generateCode);
   });
+
+  const enrollKeyInput = document.getElementById("enrollKey");
+
+  enrollKeyInput.addEventListener("input", function() {
+        // Ganti setiap spasi dengan string kosong
+        this.value = this.value.replace(/\s/g, '');
+    });
 </script>

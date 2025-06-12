@@ -75,18 +75,31 @@ module.exports.deleteCourse = async (req, res) => {
 
 module.exports.enroll = async (req, res) => {
   const { id } = req.params;
+  const { enrollKey } = req.body; // Ambil enrollKey dari body permintaan
+
   const course = await Course.findById(id);
+
+  // Cek apakah course ditemukan
+  if (!course) {
+    // Mengirimkan JSON response untuk JavaScript
+    return res.json({ success: false, message: "Kelas tidak ditemukan." });
+  }
 
   // Cek apakah user sudah terdaftar
   const alreadyEnrolled = course.students.includes(req.user._id);
   if (alreadyEnrolled) {
-    req.flash("info", "Kamu sudah terdaftar di kelas ini.");
-    return res.redirect("/courses");
+    return res.json({ success: false, message: "Kamu sudah enroll di kelas ini." });
+  }
+
+  // Bandingkan enroll key
+  if (course.enrollKey !== enrollKey) {
+    return res.json({ success: false, message: "Enroll key salah." });
   }
 
   // Enroll user
   course.students.push(req.user._id);
   await course.save();
-  req.flash("success", "Berhasil enroll kelas.");
-  res.redirect("/courses");
+
+  // Mengirimkan JSON response untuk JavaScript
+  return res.json({ success: true, message: "Berhasil enroll kelas." });
 };

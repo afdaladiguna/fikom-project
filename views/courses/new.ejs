@@ -49,17 +49,23 @@
           <% }); %>
         </select>
       </div>
-
+      
       <div class="mb-3">
         <label class="form-label" for="description">Deskripsi</label>
         <textarea
-          class="form-control"
-          id="description"
-          name="course[description]"
-          rows="4"
-          placeholder="Contoh: Kelas ini membahas mengenai konsep-konsep fundamental system basis data dan manfaatnya, bagaimana mengembangkan basis data, mendesain basis data dan sebagainya."
-          required
+        class="form-control"
+        id="description"
+        name="course[description]"
+        rows="4"
+        placeholder="Contoh: Kelas ini membahas mengenai konsep-konsep fundamental system basis data dan manfaatnya, bagaimana mengembangkan basis data, mendesain basis data dan sebagainya."
+        required
         ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="enrollKey">Enrollment Key (Tanpa Spasi)</label>
+        <input class="form-control" type="text" id="enrollKey" name="course[enrollKey]" placeholder="Enroll key" required />
+        </select>
       </div>
 
       <div class="mb-3 py-2">
@@ -105,4 +111,11 @@
     input.addEventListener("input", generateCode);
     input.addEventListener("change", generateCode);
   });
+
+   const enrollKeyInput = document.getElementById("enrollKey");
+
+  enrollKeyInput.addEventListener("input", function() {
+        // Ganti setiap spasi dengan string kosong
+        this.value = this.value.replace(/\s/g, '');
+    });
 </script>
